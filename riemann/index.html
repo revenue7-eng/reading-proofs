@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The architecture of a proof: the Riemann Hypothesis, as we read it</title>
+<meta name="description" content="Our reading of Levent Alpöge's formal proof of the Riemann Hypothesis: a map of how it is built, with the depth of our reading marked. A reader's account, not the author's.">
+<style>
+  :root { --ink:#1d1d1b; --quiet:#5b5b57; --rule:#e3e1da; --bg:#fbfaf7; --accent:#2f5d8a; --pink:#f9d9df; }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink:#ecebe6; --quiet:#a9a8a2; --rule:#3a3a37; --bg:#191918; --accent:#8fb6dc; --pink:#4a2f35; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font: 18px/1.6 Georgia, "Iowan Old Style", "Times New Roman", serif; }
+  main { max-width: 680px; margin: 0 auto; padding: 64px 24px 96px; }
+  h1 { font-size: 40px; line-height:1.15; margin:0 0 16px; font-weight: 600; }
+  .lede { font-size: 21px; color: var(--quiet); margin: 0 0 32px; }
+  h2 { font: 600 15px/1.4 system-ui, sans-serif; letter-spacing:.06em; text-transform:uppercase; color:var(--quiet); margin: 44px 0 12px; padding-top: 22px; border-top: 1px solid var(--rule); }
+  p { margin: 0 0 16px; }
+  a { color: var(--accent); }
+  .cta { display:inline-block; margin: 4px 0 8px; padding: 14px 22px; border-radius: 8px; background: var(--accent); color: var(--bg); text-decoration:none; font: 600 16px/1 system-ui, sans-serif; }
+  ul { padding-left: 20px; margin: 0 0 16px; }
+  li { margin: 0 0 8px; }
+  .key { display:inline-block; width: 14px; height: 14px; border-radius: 3px; border:1px solid var(--quiet); vertical-align: -2px; margin-right: 6px; }
+  .key.pink { background: var(--pink); }
+  .status { border-left: 3px solid var(--accent); padding: 4px 0 4px 16px; }
+  footer { margin-top: 64px; font: 14px/1.5 system-ui, sans-serif; color: var(--quiet); }
+</style>
+</head>
+<body>
+<main>
+  <h1>The architecture of a proof</h1>
+  <p class="lede">A proof of the Riemann Hypothesis has been announced, written only for a machine. We read it to understand how it is built. This is what we found.</p>
+  <p><a class="cta" href="map.html">Open the map</a> &nbsp; <a href="../">All readings</a></p>
+
+  <h2>What this is</h2>
+  <p>In November 2026 Levent Alpöge announced, in a four-page note, that he and Claude had proved the Riemann Hypothesis and its generalization to all Dirichlet L-functions. The proof exists only as an archive of Lean code: about 175,000 files and 1.5 million declarations by our count. There is no human-readable version of the argument.</p>
+  <p>We read the archive's source, layer by layer, to understand the proof. This site is our reading. It is not the author's account, and where our understanding may be wrong, we say so.</p>
+
+  <h2>Status</h2>
+  <div class="status">
+  <p>The statement the archive proves is the formal definition of the Riemann Hypothesis in Mathlib, Lean's mathematics library. The proof has not been peer reviewed, and the author has not published a version for people to read. We do not claim the hypothesis is proved in the classical sense. We describe how the formal argument is built.</p>
+  </div>
+
+  <h2>The idea in one paragraph</h2>
+  <p>In 1969 Sergei Stepanov found an elementary proof of the analogue of the Riemann Hypothesis for curves over finite fields. His argument relies on one tool, the Frobenius map, which the ordinary integers do not have. As we read it, the new proof carries Stepanov's method over to the integers by splitting the work of that one tool into three roles: a single elliptic curve with complex multiplication supplies a substitute at every relevant prime, a chain of theta lifts supplies multiplicity, and characters of an abelian field sort the primes. The exponent 1/2 then appears as the balance point between two errors.</p>
+
+  <h2>How to read the map</h2>
+  <ul>
+    <li><strong>Top:</strong> the chain of conclusions, from a count of divisibility over the primes to the absence of zeros with real part above 1/2.</li>
+    <li><strong>Columns:</strong> steps 2 to 4 of the argument, and the four supports the construction rests on.</li>
+    <li><span class="key"></span><strong>White cards:</strong> known results from the literature.</li>
+    <li><span class="key pink"></span><strong>Pink cards:</strong> what we read as the author's own contribution.</li>
+    <li><strong>Third line of a card:</strong> its name in the Lean archive and how deep we read it: down to the published source, or only its statement.</li>
+  </ul>
+
+  <h2>Coming next</h2>
+  <ul>
+    <li>The full article: how we understood the proof, and how our understanding changed along the way.</li>
+    <li>A page for each part of the map.</li>
+    <li>The numerical checks we ran while reading, with code.</li>
+  </ul>
+
+  <footer>
+    <p>Andrey Lazarev, mathematician by training, Candidate of Sciences (PhD) in Physics and Mathematics. Read together with Claude (Anthropic). Corrections are welcome.</p>
+  </footer>
+</main>
+</body>
+</html>

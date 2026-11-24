@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Map: what Alpöge's proof of the Riemann Hypothesis is built from</title>
+<meta name="description" content="A map of the formal proof of the Riemann Hypothesis announced by Levent Alpöge: every known result it uses, what is new, and how deep we read each part. Our reading, not the author's.">
+<style>
+  :root {
+    --bg:#f6f5f1; --ink:#1d1d1b; --quiet:#5f5e59; --card:#ffffff; --card-edge:#cfcdc6;
+    --pink:#f9d9df; --pink-edge:#d98b98; --sect:#ecebe5; --sect-edge:#d6d4cc; --line:#6f6e68;
+    --terracotta:#c0583a; --bar:#ffffff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#181817; --ink:#ecebe6; --quiet:#a6a59f; --card:#242422; --card-edge:#45443f;
+      --pink:#4a2f35; --pink-edge:#c97c8a; --sect:#1f1f1d; --sect-edge:#34332f; --line:#9a9993;
+      --terracotta:#e07a5b; --bar:#1f1f1d;
+    }
+  }
+  html, body { margin:0; height:100%; background:var(--bg); color:var(--ink); font:15px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; overflow:hidden; }
+  .bar { position:fixed; left:0; right:0; top:0; display:flex; gap:20px; align-items:center; padding:10px 18px; background:var(--bar); border-bottom:1px solid var(--card-edge); z-index:5; }
+  .bar a { color:var(--ink); text-decoration:none; font-weight:600; }
+  .bar .st { color:var(--quiet); font-size:13.5px; flex:1; }
+  .bar button { font:600 15px system-ui, sans-serif; width:34px; height:30px; border:1px solid var(--card-edge); background:var(--card); color:var(--ink); border-radius:6px; cursor:pointer; }
+  .bar button.w { width:auto; padding:0 10px; }
+  #map { position:fixed; top:52px; left:0; right:0; bottom:0; width:100%; height:calc(100% - 52px); cursor:grab; touch-action:none; }
+  #map.drag { cursor:grabbing; }
+  .sect rect { fill:var(--sect); stroke:var(--sect-edge); stroke-width:1.2; }
+  .sect text { font:600 17px system-ui, sans-serif; fill:var(--quiet); }
+  .shape rect { fill:var(--card); stroke:var(--card-edge); stroke-width:1.2; }
+  .shape.pink rect { fill:var(--pink); stroke:var(--pink-edge); }
+  .shape.s-terracotta rect { stroke:var(--terracotta); stroke-width:2.4; }
+  .shape.s-ink rect { stroke:var(--ink); stroke-width:2.4; }
+  .fo { width:100%; height:100%; display:flex; flex-direction:column; justify-content:center; padding:6px 10px; box-sizing:border-box; color:var(--ink); text-align:center; overflow-wrap:anywhere; }
+  .fo.left { text-align:left; }
+  .fo p { margin:0; }
+  .sz-small { font-size:13px; line-height:1.3; }
+  .sz-body { font-size:16px; line-height:1.4; }
+  .sz-large { font-size:28px; line-height:1.25; }
+  .sz-title { font-size:48px; line-height:1.15; font-weight:700; font-family:Georgia, "Iowan Old Style", serif; }
+  .txt { color:var(--ink); }
+  code { font:12.5px/1.3 ui-monospace, "SF Mono", Menlo, monospace; }
+  .tbl table { border-collapse:collapse; font-size:14px; background:var(--card); color:var(--ink); }
+  .tbl td { border-bottom:1px solid var(--card-edge); padding:6px 10px; vertical-align:top; }
+  .tbl tr:first-child td { font-weight:700; }
+  .tbl td.pink { background:var(--pink); }
+  .arr { fill:none; stroke:var(--line); stroke-width:1.6; }
+  .arr.dash { stroke-dasharray:6 5; }
+  .alab { font-size:14px; fill:var(--quiet); }
+  .mk { fill:var(--line); }
+</style>
+</head>
+<body>
+<div class="bar">
+  <a href="./">&larr; The architecture of a proof</a>
+  <span class="st">Our reading of a formal proof announced in November 2026, not peer reviewed. Drag to move, scroll or use the buttons to zoom.</span>
+  <button id="zin" title="Zoom in">+</button><button id="zout" title="Zoom out">&minus;</button><button id="zfit" class="w" title="Fit the whole map">Fit</button>
+</div>
+<svg id="map" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Map of what the proof is built from"></svg>
+<script>
+const EL = [{"id": "e1", "h": 760, "text": "Step 4: size", "type": "container", "w": 280, "x": 0, "y": 40}, {"id": "e2", "h": 760, "text": "Steps 2–3: Frobenius, multiplicity", "type": "container", "w": 280, "x": 304, "y": 40}, {"id": "e3", "h": 760, "text": "Step 4: prohibition", "type": "container", "w": 280, "x": 608, "y": 40}, {"id": "e61", "h": 760, "text": "Support 3: few degenerate", "type": "container", "w": 280, "x": 912, "y": 40}, {"id": "e62", "h": 760, "text": "Support 1: integrality, norms", "type": "container", "w": 280, "x": 1216, "y": 40}, {"id": "e4", "h": 760, "text": "Support 2: Selmer", "type": "container", "w": 280, "x": 1520, "y": 40}, {"id": "e5", "h": 760, "text": "Support 4: family", "type": "container", "w": 280, "x": 1824, "y": 40}, {"id": "e40", "h": 112, "text": "Five conditions on the lattices", "type": "container", "w": 1800, "x": 0, "y": -140}, {"id": "e6", "color": "white", "h": 84, "size": "small", "text": "Kronecker limit formula\nKronecker\n`KroneckerLimit` · statement read", "type": "shape", "w": 232, "x": 24, "y": 80}, {"id": "e7", "color": "white", "h": 84, "size": "small", "text": "Chowla–Selberg: the CM period\nChowla, Selberg, 1967\n`chowla_selberg_eta` · read to source", "type": "shape", "w": 232, "x": 24, "y": 174}, {"id": "e8", "color": "white", "h": 84, "size": "small", "text": "Size benchmark ln(A!·Ω^A)\nStirling plus the period\n`kerPlace` · read to source", "type": "shape", "w": 232, "x": 24, "y": 268}, {"id": "e60", "color": "white", "h": 84, "size": "small", "text": "Mass formula for CM\nSiegel: volumes and masses\n`SiegelMassRatioCM` · statement read", "type": "shape", "w": 232, "x": 24, "y": 362}, {"id": "e9", "color": "white", "h": 84, "size": "small", "text": "Supersingular at inert p\nDeuring, 1941\nstatement read", "type": "shape", "w": 232, "x": 328, "y": 80}, {"id": "e10", "color": "white", "h": 84, "size": "small", "text": "Height-2 formal group\nLubin–Tate\n`LTIso` · statement read", "type": "shape", "w": 232, "x": 328, "y": 174}, {"id": "e11", "color": "white", "h": 84, "size": "small", "text": "p-adic sigma function\nBannai–Kobayashi line\n`sgStar` · statement read", "type": "shape", "w": 232, "x": 328, "y": 268}, {"id": "e12", "color": "white", "h": 84, "size": "small", "text": "Dwork's integrality lemma\nDwork\n`DworkLemma` · read to source", "type": "shape", "w": 232, "x": 328, "y": 362}, {"id": "e13", "color": "white", "h": 100, "size": "small", "text": "A lift adds a Satake block\nHowe 1979, Rallis 1982\n`KernelCommutationUpToUnits` · statement read", "type": "shape", "w": 232, "x": 328, "y": 456}, {"id": "e14", "color": "white", "h": 84, "size": "small", "text": "Integral Hecke compatibility\nRallis–Kudla mechanism\n`xiEx_theta_general` · read to source", "type": "shape", "w": 232, "x": 328, "y": 566}, {"id": "e15", "color": "pink", "h": 104, "size": "small", "text": "Hecke polynomial gives divisibility; chain of length √x\nthe author's own\n`Conclusion4`, `LowTermBound` · read to source", "type": "shape", "w": 232, "x": 328, "y": 660}, {"id": "e16", "color": "white", "h": 84, "size": "small", "text": "Discrete series of U(r)\nHarish-Chandra\n`IsDS` · statement read", "type": "shape", "w": 232, "x": 632, "y": 80}, {"id": "e17", "color": "white", "h": 84, "size": "small", "text": "Schur orthogonality, Bessel model\ndecay after Wu\n`LinkS`, `WuDecay` · statement read", "type": "shape", "w": 232, "x": 632, "y": 174}, {"id": "e18", "color": "white", "h": 84, "size": "small", "text": "Slope inequality\nBost\n`SlopeInequality` · read to source", "type": "shape", "w": 232, "x": 632, "y": 268}, {"id": "e21", "color": "white", "h": 84, "size": "small", "text": "Green: characters of GL over F_q\nGreen, 1955; bad weights ~1/q\n`LinkIRR` · read to source", "type": "shape", "w": 232, "x": 936, "y": 80}, {"id": "e19", "color": "white", "h": 84, "size": "small", "text": "Siegel–Weil formula\nWeil, 1965\n`SiegelWeilStd` · statement read", "type": "shape", "w": 232, "x": 1240, "y": 80}, {"id": "e20", "color": "white", "h": 100, "size": "small", "text": "Eisenstein series, doubling method\nrederived inside the archive\n`Tr.closeSph` · read to source", "type": "shape", "w": 232, "x": 1240, "y": 174}, {"id": "e22", "color": "white", "h": 84, "size": "small", "text": "Poitou–Tate duality\nPoitou, Tate\nstatement read", "type": "shape", "w": 232, "x": 1544, "y": 80}, {"id": "e23", "color": "white", "h": 84, "size": "small", "text": "Vanishing of Selmer groups\nKato's Euler system, built inside\n`KatoTwoW` · read to source", "type": "shape", "w": 232, "x": 1544, "y": 174}, {"id": "e24", "color": "white", "h": 84, "size": "small", "text": "Ferrero–Washington\n1979\n`ferreroWashington` · statement read", "type": "shape", "w": 232, "x": 1544, "y": 268}, {"id": "e25", "color": "white", "h": 84, "size": "small", "text": "Jacquet–Shalika window, not purity\nJacquet, Shalika, 1981\n`jacquetShalikaBound` · read to source", "type": "shape", "w": 232, "x": 1544, "y": 362}, {"id": "e26", "color": "white", "h": 84, "size": "small", "text": "Congruences with Eisenstein\nRibet's scheme\nby type, our identification", "type": "shape", "w": 232, "x": 1544, "y": 456}, {"id": "e27", "color": "pink", "h": 100, "size": "small", "text": "One integer NN for all l\nthe author's own\n`…_norm_nonzero_log_bound` · read to source", "type": "shape", "w": 232, "x": 1544, "y": 550}, {"id": "e28", "color": "white", "h": 84, "size": "small", "text": "Family defined by a filter\nsimple assembly\n`classSel` · read to source", "type": "shape", "w": 232, "x": 1848, "y": 80}, {"id": "e29", "color": "white", "h": 84, "size": "small", "text": "Finite subgroups of GL_n(Q)\nMinkowski\n`MinkDiv` · statement read", "type": "shape", "w": 232, "x": 1848, "y": 174}, {"id": "e30", "color": "white", "h": 100, "size": "small", "text": "Zero-free regions, zero density\nLinnik, Xylouris, Jutila (by type)\n`adm6`, `adm7`, `adm11` · statement read", "type": "shape", "w": 232, "x": 1848, "y": 268}, {"id": "e31", "color": "white", "h": 100, "size": "small", "text": "Greenberg–Wiles, Chebotarev, Artin\nexternal theorems\n`exportF_prmR_alt_alt` · statement read", "type": "shape", "w": 232, "x": 1848, "y": 378}, {"id": "e32", "color": "pink", "h": 96, "size": "body", "stroke": "terracotta", "text": "**One CM curve: the analogue of a curve with its Frobenius.** Its formal group gives a Frobenius at every inert p, its period gives the size, its field K sorts the primes. The architecture, as we read it.", "type": "shape", "w": 640, "x": 304, "y": 820}, {"id": "e63", "color": "white", "h": 64, "size": "small", "text": "**LinkMu** slopes\nfrom LinkDIV and the sizes", "type": "shape", "w": 232, "x": 24, "y": -116}, {"id": "e64", "color": "white", "h": 64, "size": "small", "text": "**LinkG** gain\nat every prime", "type": "shape", "w": 232, "x": 328, "y": -116}, {"id": "e65", "color": "white", "h": 64, "size": "small", "text": "**LinkS** frame\nnearly orthogonal", "type": "shape", "w": 232, "x": 632, "y": -116}, {"id": "e66", "color": "white", "h": 64, "size": "small", "text": "**LinkIRR** nonzero\ndegenerate share is small", "type": "shape", "w": 232, "x": 936, "y": -116}, {"id": "e67", "color": "white", "h": 64, "size": "small", "text": "**LinkDIV** divisibility\nintegral pairing and the cost of gluing", "type": "shape", "w": 536, "x": 1240, "y": -116}, {"id": "e68", "color": "white", "h": 64, "size": "small", "text": "**Family exists**\nfor every small ε", "type": "shape", "w": 232, "x": 1848, "y": -116}, {"id": "e41", "color": "white", "h": 72, "size": "body", "text": "**Step 5: balance**\nconditional theorem: Bost slopes, x/m + m", "type": "shape", "w": 440, "x": 328, "y": -310}, {"id": "e42", "color": "white", "h": 72, "size": "body", "text": "**Residual on windows**\nGm(x) ≤ x^(1/2 + cε)", "type": "shape", "w": 380, "x": 848, "y": -310}, {"id": "e43", "color": "white", "h": 72, "size": "body", "text": "**Landau lemma, window form**\na zero would spoil every window", "type": "shape", "w": 380, "x": 1308, "y": -470}, {"id": "e44", "color": "white", "h": 72, "size": "body", "text": "**All Dirichlet L-functions**\nno zeros with Re s > 1/2", "type": "shape", "w": 380, "x": 1308, "y": -310}, {"id": "e45", "color": "white", "h": 64, "size": "large", "stroke": "ink", "text": "Riemann Hypothesis", "type": "shape", "w": 300, "x": 1768, "y": -306}, {"id": "e75", "color": "white", "h": 96, "size": "body", "text": "**Step 1: sum over primes as a divisibility count**\nLegendre over inert p, weight 1 − χ_K;\nsorted by the field of the same CM curve", "type": "shape", "w": 440, "x": 328, "y": -494}, {"id": "e36", "size": "title", "text": "What Alpöge's proof is built from", "type": "text", "x": -720, "y": -800}, {"id": "e37", "size": "large", "text": "Five steps after Stepanov, four supports beneath; the new part is in the multiplicity", "type": "text", "x": -720, "y": -730}, {"id": "e38", "size": "small", "text": "Our reading of the formal proof, not the author's account. Columns: steps 2–4 and four supports. White cards: known results. Pink: the author's own, as we read it. Third line: the name in the Lean archive and how deep we read it (to the published source, or the statement only).", "type": "text", "wrap": 1400, "x": -720, "y": -680}, {"id": "e56", "size": "large", "text": "Frame: Stepanov's method", "type": "text", "x": -720, "y": -620}, {"id": "e57", "size": "small", "text": "Stepanov (1969) gave an elementary proof of the Riemann Hypothesis for curves over finite fields. The chain on the right repeats his scheme over Q; the missing Frobenius is replaced by a chain of lifts. The interpretation is ours; the author did not write it this way.", "type": "text", "wrap": 620, "x": -720, "y": -575}, {"id": "e58", "type": "table", "size": "small", "x": -720, "y": -490, "cols": [170, 210, 260], "rows": [["Role", "Stepanov", "Here"], ["Curve with Frobenius", "a curve over F_q and its Frobenius", "one CM curve: Frobenius at every inert p"], ["Object", "polynomial with zeros", "Fock lattices on the CM curve"], ["Existence of the object", "dimension count", "theta lifts, theorem K, the family"], ["Prohibition", "zeros ≤ degree", "slope inequality"], ["Multiplicity", "one Frobenius identity at all points", "lifts with Hecke, at each p separately"], ["Parameter", "order of zeros l", "chain length m"], ["Balance", "l + q·g/l", "x/m + m"], ["Result", "N ≤ q + O(√q)", "Gm(x) ≤ x^(1/2+ε)"], ["Passage", "twisting the curve", "windowed Landau"]], "pink": [[1, 2], [5, 2]]}, {"id": "e72", "color": "pink", "h": 200, "size": "body", "textAlign": "left", "text": "**Stepanov's global Frobenius is split here into three roles:**\n1. One CM curve gives a Frobenius at every inert p.\n2. A chain of lifts with Hecke gives multiplicity.\n3. Characters of an abelian field sort the primes.\nThe interpretation is ours.", "type": "shape", "w": 620, "x": -720, "y": 40}, {"id": "e33", "type": "arrow", "from": "e32", "fromSide": "left", "to": "e1", "toSide": "bottom"}, {"id": "e34", "type": "arrow", "from": "e32", "fromSide": "top", "to": "e2", "toSide": "bottom"}, {"id": "e35", "type": "arrow", "from": "e32", "fromSide": "right", "to": "e4", "toSide": "bottom", "dash": true, "label": "field K lies inside the field E of the bound"}, {"id": "e46", "type": "arrow", "from": "e1", "fromSide": "top", "to": "e63", "toSide": "bottom"}, {"id": "e47", "type": "arrow", "from": "e2", "fromSide": "top", "to": "e64", "toSide": "bottom"}, {"id": "e48", "type": "arrow", "from": "e3", "fromSide": "top", "to": "e65", "toSide": "bottom"}, {"id": "e49", "type": "arrow", "from": "e4", "fromSide": "top", "to": "e67", "toSide": "bottom"}, {"id": "e50", "type": "arrow", "from": "e5", "fromSide": "top", "to": "e68", "toSide": "bottom"}, {"id": "e69", "type": "arrow", "from": "e61", "fromSide": "top", "to": "e66", "toSide": "bottom"}, {"id": "e70", "type": "arrow", "from": "e62", "fromSide": "top", "to": "e67", "toSide": "bottom"}, {"id": "e51", "type": "arrow", "from": "e40", "fromSide": "top", "to": "e41", "toSide": "bottom"}, {"id": "e52", "type": "arrow", "from": "e41", "fromSide": "right", "to": "e42", "toSide": "left"}, {"id": "e53", "type": "arrow", "from": "e42", "fromSide": "right", "to": "e44", "toSide": "left"}, {"id": "e54", "type": "arrow", "from": "e43", "fromSide": "bottom", "to": "e44", "toSide": "top"}, {"id": "e55", "type": "arrow", "from": "e44", "fromSide": "right", "to": "e45", "toSide": "left"}, {"id": "e71", "type": "arrow", "from": "e68", "fromSide": "top", "to": "e42", "toSide": "bottom"}, {"id": "e76", "type": "arrow", "from": "e75", "fromSide": "bottom", "to": "e41", "toSide": "top"}, {"id": "e59", "type": "arrow", "from": "e58", "fromSide": "right", "to": "e41", "toSide": "left", "dash": true}, {"id": "e73", "type": "arrow", "from": "e72", "fromSide": "bottom", "to": "e32", "toSide": "left", "dash": true}];
+const NS = 'http://www.w3.org/2000/svg', XH = 'http://www.w3.org/1999/xhtml';
+const svg = document.getElementById('map');
+const byId = Object.fromEntries(EL.map(e => [e.id, e]));
+function s(tag, attrs, parent) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); (parent || root).appendChild(e); return e; }
+function inline(parent, line) {
+  const re = /(\*\*[^*]+\*\*|`[^`]+`)/g; let last = 0, m;
+  while ((m = re.exec(line))) {
+    if (m.index > last) parent.appendChild(document.createTextNode(line.slice(last, m.index)));
+    const t = m[0];
+    const n = document.createElement(t.startsWith('**') ? 'strong' : 'code');
+    n.textContent = t.startsWith('**') ? t.slice(2, -2) : t.slice(1, -1);
+    parent.appendChild(n); last = m.index + t.length;
+  }
+  if (last < line.length) parent.appendChild(document.createTextNode(line.slice(last)));
+}
+function html(parent, x, y, w, h, cls) {
+  const fo = s('foreignObject', {x, y, width:w, height:h}, parent);
+  const d = document.createElementNS(XH, 'div'); d.className = cls; fo.appendChild(d); return [fo, d];
+}
+const defs = document.createElementNS(NS, 'defs'); svg.appendChild(defs);
+const mk = document.createElementNS(NS, 'marker');
+for (const [k, v] of Object.entries({id:'ah', viewBox:'0 0 10 10', refX:'9', refY:'5', markerWidth:'7', markerHeight:'7', orient:'auto-start-reverse'})) mk.setAttribute(k, v);
+const mp = document.createElementNS(NS, 'path'); mp.setAttribute('d', 'M0 0L10 5L0 10z'); mp.setAttribute('class', 'mk'); mk.appendChild(mp); defs.appendChild(mk);
+const root = document.createElementNS(NS, 'g'); svg.appendChild(root);
+const gSect = s('g', {}), gArr = s('g', {}), gTop = s('g', {});
+const box = {};
+
+for (const e of EL) {
+  if (e.type === 'container') {
+    const g = s('g', {class:'sect'}, gSect);
+    const rc = s('rect', {x:e.x, y:e.y, width:e.w, height:e.h, rx:12}, g);
+    const t = s('text', {x:e.x + 4, y:e.y - 10}, g); t.textContent = e.text;
+    box[e.id] = {x:e.x, y:e.y, w:e.w, h:e.h, sect:true, rect:rc};
+  } else if (e.type === 'shape') {
+    const g = s('g', {class:'shape' + (e.color === 'pink' ? ' pink' : '') + (e.stroke ? ' s-' + e.stroke : '')}, gTop);
+    s('rect', {x:e.x, y:e.y, width:e.w, height:e.h, rx:10}, g);
+    const [fo, d] = html(g, e.x, e.y, e.w, e.h, 'fo sz-' + (e.size || 'body') + (e.textAlign === 'left' ? ' left' : ''));
+    d.style.height = 'auto'; d.style.minHeight = '100%';
+    for (const line of e.text.split('\n')) { const p = document.createElementNS(XH, 'p'); inline(p, line); d.appendChild(p); }
+    box[e.id] = {x:e.x, y:e.y, w:e.w, h:e.h, shape:true, g, rect:g.firstChild, fo, d};
+  } else if (e.type === 'text') {
+    const w = e.wrap || 2000;
+    const [fo, d] = html(gTop, e.x, e.y, w, 600, 'txt sz-' + (e.size || 'body'));
+    for (const line of e.text.split('\n')) { const p = document.createElementNS(XH, 'p'); p.style.margin = '0'; inline(p, line); d.appendChild(p); }
+    box[e.id] = {x:e.x, y:e.y, w, h:0, fo, d};
+  } else if (e.type === 'table') {
+    const w = e.cols.reduce((a, b) => a + b, 0);
+    const [fo, d] = html(gTop, e.x, e.y, w, 1000, 'tbl');
+    const t = document.createElementNS(XH, 'table'); t.style.width = w + 'px';
+    e.rows.forEach((r, i) => {
+      const tr = document.createElementNS(XH, 'tr');
+      r.forEach((c, j) => { const td = document.createElementNS(XH, 'td'); td.style.width = e.cols[j] + 'px'; td.textContent = c; if ((e.pink || []).some(([a, b]) => a === i && b === j)) td.className = 'pink'; tr.appendChild(td); });
+      t.appendChild(tr);
+    });
+    d.appendChild(t);
+    box[e.id] = {x:e.x, y:e.y, w, h:0, fo, d, tbl:t};
+  }
+}
+
+function setY(b, y, h) { b.y = y; b.h = h; b.rect.setAttribute('y', y); b.rect.setAttribute('height', h); b.fo.setAttribute('y', y); b.fo.setAttribute('height', h); }
+function settle() {
+  for (const id in box) {
+    const b = box[id];
+    if (b.fo && !b.shape) { const h = Math.ceil((b.tbl || b.d).offsetHeight); if (h > 0) { b.h = h; b.fo.setAttribute('height', h + 2); } }
+  }
+  for (const id in box) { const b = box[id]; if (b.shape) { const need = Math.ceil(b.d.scrollHeight); if (need > b.h) setY(b, b.y, need); } }
+  for (const cid in box) {
+    const c = box[cid]; if (!c.sect) continue;
+    const kids = Object.values(box).filter(b => b.shape && b.x >= c.x && b.x + b.w <= c.x + c.w && b.y >= c.y && b.y < c.y + c.h).sort((a, b) => a.y - b.y);
+    const cur = {}; let low = -1e9;
+    for (const b of kids) { const k = b.x; const y = Math.max(b.y, cur[k] ?? -1e9); if (y !== b.y) setY(b, y, b.h); cur[k] = b.y + b.h + 10; low = Math.max(low, cur[k]); }
+    if (kids.length && low + 14 > c.y + c.h) { c.h = low + 14 - c.y; c.rect.setAttribute('height', c.h); }
+  }
+  let bottom = -1e9;
+  for (const cid in box) { const c = box[cid]; if (c.sect && c.y > 0) bottom = Math.max(bottom, c.y + c.h); }
+  for (const id in box) { const b = box[id]; if (b.shape && b.y >= 800 && b.y < bottom + 20) setY(b, bottom + 20, b.h); }
+}
+function pt(b, side) {
+  if (side === 'top') return [b.x + b.w / 2, b.y];
+  if (side === 'bottom') return [b.x + b.w / 2, b.y + b.h];
+  if (side === 'left') return [b.x, b.y + b.h / 2];
+  return [b.x + b.w, b.y + b.h / 2];
+}
+const V = s => s === 'top' || s === 'bottom';
+function arrows() {
+  gArr.innerHTML = '';
+  for (const e of EL) {
+    if (e.type !== 'arrow') continue;
+    const [x1, y1] = pt(box[e.from], e.fromSide), [x2, y2] = pt(box[e.to], e.toSide);
+    let d, lx, ly;
+    if (V(e.fromSide) && V(e.toSide)) { const my = (y1 + y2) / 2; d = Math.abs(x1 - x2) < 1 ? `M${x1} ${y1}V${y2}` : `M${x1} ${y1}V${my}H${x2}V${y2}`; lx = (x1 + x2) / 2; ly = my - 8; }
+    else if (!V(e.fromSide) && !V(e.toSide)) { const mx = (x1 + x2) / 2; d = Math.abs(y1 - y2) < 1 ? `M${x1} ${y1}H${x2}` : `M${x1} ${y1}H${mx}V${y2}H${x2}`; lx = mx; ly = Math.min(y1, y2) - 8; }
+    else if (!V(e.fromSide)) { d = `M${x1} ${y1}H${x2}V${y2}`; lx = (x1 + x2) / 2; ly = y1 - 10; }
+    else { d = `M${x1} ${y1}V${y2}H${x2}`; lx = (x1 + x2) / 2; ly = y2 - 10; }
+    s('path', {d, class:'arr' + (e.dash ? ' dash' : ''), 'marker-end':'url(#ah)'}, gArr);
+    if (e.label) { const t = s('text', {x:lx, y:ly, 'text-anchor':'middle', class:'alab'}, gArr); t.textContent = e.label; }
+  }
+}
+
+let vb = {x:0, y:0, w:1000, h:800};
+function apply() { svg.setAttribute('viewBox', `${vb.x} ${vb.y} ${vb.w} ${vb.h}`); }
+function scale() { const r = svg.getBoundingClientRect(); return r.width / vb.w || 1; }
+function bounds() {
+  let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+  for (const id in box) { const b = box[id]; x0 = Math.min(x0, b.x); y0 = Math.min(y0, b.y - 40); x1 = Math.max(x1, b.x + b.w); y1 = Math.max(y1, b.y + b.h); }
+  return {x0, y0, x1, y1};
+}
+function fit() {
+  const B = bounds(), r = svg.getBoundingClientRect(), pad = 40;
+  const w = B.x1 - B.x0 + 2 * pad, h = B.y1 - B.y0 + 2 * pad;
+  const k = Math.max(w / r.width, h / r.height);
+  vb = {w:r.width * k, h:r.height * k, x:0, y:0};
+  vb.x = B.x0 - pad - (vb.w - w) / 2; vb.y = B.y0 - pad - (vb.h - h) / 2; apply();
+}
+function zoom(f, cx, cy) {
+  const r = svg.getBoundingClientRect();
+  if (cx === undefined) { cx = r.left + r.width / 2; cy = r.top + r.height / 2; }
+  const px = vb.x + (cx - r.left) / r.width * vb.w, py = vb.y + (cy - r.top) / r.height * vb.h;
+  vb.w *= f; vb.h *= f; vb.x = px - (cx - r.left) / r.width * vb.w; vb.y = py - (cy - r.top) / r.height * vb.h; apply();
+}
+svg.addEventListener('wheel', ev => { ev.preventDefault(); zoom(Math.exp(ev.deltaY * 0.0015), ev.clientX, ev.clientY); }, {passive:false});
+let drag = null;
+svg.addEventListener('pointerdown', ev => { drag = {x:ev.clientX, y:ev.clientY, vx:vb.x, vy:vb.y}; svg.setPointerCapture(ev.pointerId); svg.classList.add('drag'); });
+svg.addEventListener('pointermove', ev => { if (!drag) return; const k = vb.w / svg.getBoundingClientRect().width; vb.x = drag.vx - (ev.clientX - drag.x) * k; vb.y = drag.vy - (ev.clientY - drag.y) * k; apply(); });
+svg.addEventListener('pointerup', () => { drag = null; svg.classList.remove('drag'); });
+document.getElementById('zin').onclick = () => zoom(0.8);
+document.getElementById('zout').onclick = () => zoom(1.25);
+document.getElementById('zfit').onclick = fit;
+window.addEventListener('resize', fit);
+
+vb = {x:-760, y:-860, w:2900, h:1820}; apply();
+requestAnimationFrame(() => { settle(); arrows(); fit(); });
+</script>
+</body>
+</html>
