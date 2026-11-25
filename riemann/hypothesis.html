@@ -67,6 +67,9 @@
   <p>This is an exact equivalence. Von Koch showed in 1901 that the hypothesis holds if and only if &pi;(x) &minus; li(x) is at most a constant times &radic;x &middot; ln x. In 1976 Schoenfeld made the constant explicit: the hypothesis implies</p>
   <p class="formula">|&pi;(x) &minus; li(x)| &lt; &radic;x &middot; ln x / (8&pi;) &nbsp;&nbsp; for every x &ge; 2657</p>
   <p>So the hypothesis is, in the end, a statement about counting primes. The exponent 1/2 is the size of the error.</p>
+  <p>It can even be said with no zeta function and no primes in sight. Let &sigma;(n) be the sum of the divisors of n. Robin proved in 1984 that the hypothesis is equivalent to</p>
+  <p class="formula">&sigma;(n) &lt; e<sup>&gamma;</sup> &middot; n &middot; ln ln n &nbsp;&nbsp; for every n &gt; 5040</p>
+  <p>where &gamma; = 0.5772&hellip; is Euler's constant. At n = 5040 itself the inequality fails: &sigma;(5040) = 19 344, while the right side is about 19 237. Lagarias gave a similar version in 2002, with harmonic numbers in place of ln ln n. Both are now theorems in Lean: Sutherland combined the archive with an independent formalization of Robin's and Lagarias's criteria (kimihiro64/Robin1984) and put the two inequalities, stated with no hypotheses, through the same kernel checks.</p>
 
   <h2>Check it yourself</h2>
   <div class="tool">
@@ -98,7 +101,7 @@
 
 theorem riemannHypothesis : RiemannHypothesis</code></pre>
   <p>Read aloud: for every complex s, if &zeta;(s) = 0, s is not one of &minus;2, &minus;4, &minus;6, &hellip;, and s is not 1, then the real part of s is 1/2. The same Mathlib file proves that riemannZeta is the usual function: it equals the sum of 1/n<sup>s</sup> when the real part of s is above 1, it has the trivial zeros, and it satisfies the functional equation. At s = 1 Mathlib gives the function an arbitrary value, so excluding that point weakens nothing.</p>
-  <p>Four more theorems in the archive's Main.lean concern Dirichlet L-functions. The independent checks found that all five match the statements in the challenge file.</p>
+  <p>Main.lean proves five theorems. Besides this one, a second states the same thing in the archive's own words, and Lean accepts the two as equal by definition. The other three concern Dirichlet L-functions: no zeros with real part above 1/2 for every character, primitive or not; zeros in the strip lie on the line, for every character; and the same for primitive characters, the form in which the generalized hypothesis is usually stated. The independent checks found that all five match the statements in the challenge file, which imports only Mathlib.</p>
 
   <h2>Half a strip is enough</h2>
   <p>The map ends on a weaker-looking line: no Dirichlet L-function has a zero with real part above 1/2. In the archive all five theorems follow from that one statement, which the code calls EveryCharacter. The reason is the mirror symmetry. The functional equation pairs a zero at s with a zero at 1 &minus; s (for &zeta;), or with a zero of the conjugate character's L-function at the mirror point (for a primitive character). A zero to the left of the line would therefore have a partner to the right. Rule out the right half of the strip for every character at once, and the left half is ruled out too; what remains is the line. This step is classical, and in the archive it uses only Mathlib.</p>
@@ -108,9 +111,11 @@ theorem riemannHypothesis : RiemannHypothesis</code></pre>
   <ul class="sources">
     <li>B. Riemann, Ueber die Anzahl der Primzahlen unter einer gegebenen Gr&ouml;sse, Monatsberichte der Berliner Akademie, 1859. The extension of &zeta;, the functional equation, the explicit formula.</li>
     <li>L. Schoenfeld, Sharper bounds for the Chebyshev functions &theta;(x) and &psi;(x). II, Math. Comp. 30 (1976), 337&ndash;360. <a href="https://doi.org/10.2307/2005976">doi:10.2307/2005976</a>. Corollary 1: the bound used in the check. The equivalence itself is von Koch, Acta Math. 24 (1901), 159&ndash;182.</li>
+    <li>G. Robin, Grandes valeurs de la fonction somme des diviseurs et hypoth&egrave;se de Riemann, J. Math. Pures Appl. 63 (1984), 187&ndash;213. J. C. Lagarias, An elementary problem equivalent to the Riemann hypothesis, Amer. Math. Monthly 109 (2002), 534&ndash;543.</li>
     <li>D. Platt and T. Trudgian, The Riemann hypothesis is true up to 3&middot;10<sup>12</sup>, Bull. London Math. Soc. 53:3 (2021), 792&ndash;797. <a href="https://arxiv.org/abs/2004.09765">arXiv:2004.09765</a>.</li>
     <li>D. R. Johnston, Improving bounds on prime counting functions by partial verification of the Riemann hypothesis. <a href="https://arxiv.org/abs/2109.02249">arXiv:2109.02249</a>. Schoenfeld's inequality without the hypothesis up to 1.1&middot;10<sup>26</sup>.</li>
     <li>D. Loeffler and M. Stoll, Formalizing zeta and L-functions in Lean. <a href="https://arxiv.org/abs/2503.00959">arXiv:2503.00959</a>. How &zeta;, Dirichlet L-functions and the formal statement entered Mathlib.</li>
+    <li>A. Sutherland, <a href="https://math.mit.edu/~drew/grh/">Verification files for the Lean proof of the Riemann Hypothesis</a>, version of 24 November 2026, 05:25 UTC. The five statements of Main.lean, the kernel checks, and the Robin and Lagarias inequalities combined with kimihiro64/Robin1984.</li>
     <li>Mathlib, <a href="https://leanprover-community.github.io/mathlib4_docs/Mathlib/NumberTheory/LSeries/RiemannZeta.html">Mathlib.NumberTheory.LSeries.RiemannZeta</a>; the definition at the commit the archive pins (0df444a3) is quoted in ishaan2006/rh-lean-reproduction, <a href="https://github.com/ishaan2006/rh-lean-reproduction/blob/main/results/statement_check.txt">results/statement_check.txt</a>, which also records the reduction to EveryCharacter.</li>
   </ul>
   <p class="status">The history and the formal statement are from these sources. The description of the zeros as waves is the standard informal picture of Riemann's explicit formula, not a precise statement.</p>
