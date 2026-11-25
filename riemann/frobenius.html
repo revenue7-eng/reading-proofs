@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Frobenius at every inert prime: where the gain comes from</title>
+<meta name="description" content="One part of the proof of the Riemann Hypothesis, as we read it: the local structure that stands in for Stepanov's Frobenius, with live checks of the congruence and of Dwork's radius.">
+<style>
+  :root { --ink:#1d1d1b; --quiet:#5b5b57; --rule:#e3e1da; --bg:#fbfaf7; --accent:#2f5d8a; --pink:#f9d9df; --ok:#2e7d4f; --bad:#a8552f; }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink:#ecebe6; --quiet:#a9a8a2; --rule:#3a3a37; --bg:#191918; --accent:#8fb6dc; --pink:#4a2f35; --ok:#7fcf9d; --bad:#e09a72; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font: 18px/1.6 Georgia, "Iowan Old Style", "Times New Roman", serif; }
+  main { max-width: 680px; margin: 0 auto; padding: 64px 24px 96px; }
+  h1 { font-size: 40px; line-height:1.15; margin:0 0 16px; font-weight: 600; }
+  .lede { font-size: 21px; color: var(--quiet); margin: 0 0 32px; }
+  h2 { font: 600 15px/1.4 system-ui, sans-serif; letter-spacing:.06em; text-transform:uppercase; color:var(--quiet); margin: 44px 0 12px; padding-top: 22px; border-top: 1px solid var(--rule); }
+  p { margin: 0 0 16px; }
+  a { color: var(--accent); }
+  .status { border-left: 3px solid var(--accent); padding: 4px 0 4px 16px; }
+  .formula { font-family: "Cambria Math", "STIX Two Math", Georgia, serif; text-align: center; margin: 8px 0 18px; font-size: 19px; }
+  footer { margin-top: 64px; font: 12px/1.5 system-ui, sans-serif; color: var(--quiet); }
+  table { width:100%; border-collapse: collapse; font: 14px/1.45 system-ui, sans-serif; margin: 4px 0 16px; font-variant-numeric: tabular-nums; }
+  th, td { text-align:left; padding: 7px 8px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { color: var(--quiet); font-weight: 600; }
+  tr.own td { background: var(--pink); }
+  code { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .tool { font: 15px/1.5 system-ui, sans-serif; margin: 8px 0 20px; padding: 16px; border: 1px solid var(--rule); border-radius: 8px; }
+  .row { display:flex; align-items:center; gap:12px; margin: 0 0 10px; flex-wrap: wrap; }
+  .row label { width: 170px; flex: none; color: var(--quiet); }
+  .row input[type=range] { flex: 1; min-width: 140px; accent-color: var(--accent); }
+  .row output { min-width: 56px; text-align: right; font-variant-numeric: tabular-nums; }
+  .seg { display:flex; gap:6px; flex-wrap: wrap; }
+  .seg button { font: 600 14px/1 system-ui, sans-serif; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--rule); background: transparent; color: var(--ink); cursor: pointer; }
+  .seg button.on { border-color: var(--accent); color: var(--accent); }
+  .verdict { font-weight: 600; margin-top: 8px; }
+  .ok { color: var(--ok); } .bad { color: var(--bad); }
+</style>
+</head>
+<body>
+<main>
+  <h1>A Frobenius at every inert prime</h1>
+  <p class="lede">The local structure that stands in for Stepanov's missing tool, and where the small gain at each prime comes from.</p>
+  <p><a href="./">The architecture of a proof</a> &nbsp; <a href="map.html">The map</a> &nbsp; <a href="ladder.html">The ladder of lifts</a></p>
+
+  <h2>The missing tool</h2>
+  <p>Stepanov's proof over a finite field with q elements rests on one map, the Frobenius: raise every number to the power q. It fixes exactly the solutions over that field, and it respects addition. With it he builds a polynomial that vanishes many times at every solution.</p>
+  <p>The ordinary whole numbers have no such map. Each prime p has its own clock arithmetic with its own Frobenius, and they do not fit together. The proof does not look for one global map. It finds a local stand-in at every prime of the right kind, all cut from the same object.</p>
+
+  <h2>Where the stand-in comes from</h2>
+  <p>The central object of the proof is a field with complex multiplication. Its simplest model is an elliptic curve with the same symmetry, and we describe the mechanism on that model, as the archive's statements allow.</p>
+  <p>Take an imaginary quadratic field K. A prime p is <em>inert</em> if it stays prime in K; about half of all primes are. At every inert prime the curve has supersingular reduction (Deuring, 1941). That means its formal group, the law of adding points near zero written as a power series, has height 2.</p>
+  <p>In the archive the logarithm of this group is the series</p>
+  <p class="formula">log(x) = Σ<sub>j ≥ 0</sub> x<sup>p<sup>2j</sup></sup> / p<sup>j</sup></p>
+  <p>Its coefficients are fractions. Rescale the coordinate by ϖ, a number with ϖ<sup>p²−1</sup> = p. Then the coefficients become whole numbers, and modulo p the series is just x + x<sup>p²</sup>. The second term is the Frobenius of the field with p² elements. There is the stand-in, at every inert prime at once.</p>
+
+  <h2>Check it</h2>
+  <p>After rescaling, the coefficient of x<sup>p<sup>2j</sup></sup> is p raised to the power (p<sup>2j</sup> − 1)/(p² − 1) − j. The table computes these exponents exactly. An exponent 0 means the term survives modulo p; anything larger means it vanishes.</p>
+  <div class="tool">
+    <div class="row"><label>prime p</label><div class="seg" id="pSeg"></div></div>
+    <table id="logTab"></table>
+    <div class="verdict ok" id="logVerdict"></div>
+  </div>
+
+  <h2>Dwork's radius</h2>
+  <p>To turn the congruence into divisibility, the proof puts the part that is divisible by p under an exponential, with a normalising factor 1/(p − 1). The p-adic exponential Σ yⁿ/n! has whole-number coefficients exactly when y is divisible to order at least 1/(p − 1): Dwork's radius. The proof is one line of Legendre's formula: p divides n! exactly (n − s(n))/(p − 1) times, where s(n) is the sum of the digits of n in base p.</p>
+  <p>Below, choose how divisible y is. The tool finds the worst term yⁿ/n! up to n = p⁴. At the radius every term is whole; just below it, the terms at n = p, p², … are not.</p>
+  <div class="tool">
+    <div class="row"><label>prime p</label><div class="seg" id="qSeg"></div></div>
+    <div class="row"><label for="tIn">order of y, in units of 1/(p−1)</label><input id="tIn" type="range" min="80" max="120" step="1" value="100"><output id="tOut"></output></div>
+    <div id="dworkRes"></div>
+    <div class="verdict" id="dworkVerdict"></div>
+  </div>
+  <p>We checked both facts by computer at p = 5 while reading: the congruence holds exactly modulo p, and the threshold is sharp.</p>
+
+  <h2>The gain</h2>
+  <p>Put together, at every inert prime p the objects of the proof gain divisibility with weight</p>
+  <p class="formula">p / (p² − 1) = 1/p + 1/p³ + 1/p⁵ + …</p>
+  <p>only odd powers of p. That is exactly the weight 1 − χ<sub>K</sub>(pⁱ) of the first step, which is 2 on odd powers and 0 on even ones. Both the odd powers and the height 2 come from one fact: the residue field at an inert prime has p² elements. At p = 5 the weight is 5/24.</p>
+  <p>One gain per prime is small. Collecting it many times is the work of <a href="ladder.html">the ladder of lifts</a>.</p>
+
+  <h2>What it is built from</h2>
+  <table>
+    <tr><th>Piece</th><th>Known from</th><th>In the archive</th><th>How deep we read</th></tr>
+    <tr><td>Supersingular reduction at inert p</td><td>Deuring, 1941</td><td></td><td>the statement</td></tr>
+    <tr><td>Formal group of height 2</td><td>Lubin–Tate</td><td><code>LTIso</code></td><td>the statement</td></tr>
+    <tr><td>p-adic sigma function, for the theta kernel</td><td>the Bannai–Kobayashi line</td><td><code>sgStar</code></td><td>the statement</td></tr>
+    <tr><td>Dwork's integrality lemma</td><td>Dwork</td><td><code>DworkLemma</code></td><td>to the published source</td></tr>
+  </table>
+  <p>Every piece here is known, and the four facts used are elementary. What we take to be new is not a piece but the fit: the same object that gives this gain also gives the size and sorts the primes, so the three agree.</p>
+
+  <h2>What we have and have not read</h2>
+  <p class="status">This page is our reading of the formal proof, not the author's account. The divisibility of the theta kernel at each inert prime is the deepest local statement of the argument; we, like Rubinstein's guide, take it from the archive. Our checks at p = 5 are sanity checks of the congruence and the radius, not of that statement.</p>
+
+  <footer>
+    <p>Corrections are welcome: <a href="https://github.com/revenue7-eng/reading-proofs/issues">open an issue</a>.</p>
+  </footer>
+</main>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var primes = [3, 5, 7, 11];
+  var pLog = 5, pDw = 5;
+
+  function seg(id, cur, set) {
+    var box = $(id); box.innerHTML = '';
+    primes.forEach(function (p) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.textContent = p; if (p === cur) b.className = 'on';
+      b.addEventListener('click', function () { set(p); });
+      box.appendChild(b);
+    });
+  }
+  function cell(tr, text, tag) {
+    var c = document.createElement(tag || 'td'); c.textContent = text; tr.appendChild(c);
+  }
+  function supPow(base, e) { return base + '^' + e; }
+
+  function drawLog() {
+    seg('pSeg', pLog, function (p) { pLog = p; drawLog(); });
+    var P = BigInt(pLog), t = $('logTab'); t.innerHTML = '';
+    var h = document.createElement('tr');
+    ['j', 'term', 'exponent of p in the coefficient', 'mod p'].forEach(function (s) { cell(h, s, 'th'); });
+    t.appendChild(h);
+    var survive = [];
+    for (var j = 0; j <= 4; j++) {
+      var N = P ** BigInt(2 * j);
+      var e = (N - 1n) / (P * P - 1n) - BigInt(j);
+      var tr = document.createElement('tr');
+      cell(tr, j);
+      cell(tr, 'x^' + N.toString());
+      cell(tr, e.toString());
+      cell(tr, e === 0n ? 'survives' : 'vanishes');
+      t.appendChild(tr);
+      if (e === 0n) survive.push(j);
+    }
+    $('logVerdict').textContent = (survive.join(',') === '0,1')
+      ? 'Modulo ' + pLog + ' the series is x + x^' + (pLog * pLog) + ', as claimed.'
+      : 'Unexpected result.';
+  }
+
+  function vFact(n, p) { var s = 0, q = p; while (q <= n) { s += Math.floor(n / q); q *= p; } return s; }
+
+  function drawDwork() {
+    seg('qSeg', pDw, function (p) { pDw = p; drawDwork(); });
+    var k = +$('tIn').value;
+    $('tOut').textContent = (k / 100).toFixed(2);
+    var p = pDw, N = Math.pow(p, 4), worst = Infinity, at = 1;
+    for (var n = 1; n <= N; n++) {
+      var v = (n * k / 100 - vFact(n, p) * (p - 1)) / (p - 1);
+      if (v < worst - 1e-12) { worst = v; at = n; }
+    }
+    $('dworkRes').textContent = 'Smallest order of y^n / n! for n ≤ ' + N + ': ' + worst.toFixed(3) + ', at n = ' + at + '.';
+    var ok = worst >= -1e-12;
+    $('dworkVerdict').className = 'verdict ' + (ok ? 'ok' : 'bad');
+    $('dworkVerdict').textContent = ok ? 'Every term is a whole number.' : 'Some terms are not whole: below the radius.';
+  }
+
+  $('tIn').addEventListener('input', drawDwork);
+  drawLog();
+  drawDwork();
+})();
+</script>
+</body>
+</html>
