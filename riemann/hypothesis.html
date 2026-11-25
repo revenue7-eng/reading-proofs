@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Riemann Hypothesis: what it says</title>
+<meta name="description" content="What the Riemann Hypothesis says, in plain terms: the zeta function, its zeros, the line Re s = 1/2, what it means for the count of primes, the generalization to Dirichlet L-functions, and the exact formal statement the archive proves. With a live count of primes against Schoenfeld's bound.">
+<style>
+  :root { --ink:#1d1d1b; --quiet:#5b5b57; --rule:#e3e1da; --bg:#fbfaf7; --accent:#2f5d8a; --ok:#2e7d4f; --bad:#a8552f; }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink:#ecebe6; --quiet:#a9a8a2; --rule:#3a3a37; --bg:#191918; --accent:#8fb6dc; --ok:#7fcf9d; --bad:#e09a72; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font: 18px/1.6 Georgia, "Iowan Old Style", "Times New Roman", serif; }
+  main { max-width: 680px; margin: 0 auto; padding: 64px 24px 96px; }
+  h1 { font-size: 40px; line-height:1.15; margin:0 0 16px; font-weight: 600; }
+  .lede { font-size: 21px; color: var(--quiet); margin: 0 0 32px; }
+  h2 { font: 600 15px/1.4 system-ui, sans-serif; letter-spacing:.06em; text-transform:uppercase; color:var(--quiet); margin: 44px 0 12px; padding-top: 22px; border-top: 1px solid var(--rule); }
+  p { margin: 0 0 16px; }
+  a { color: var(--accent); }
+  ul { padding-left: 22px; margin: 0 0 16px; }
+  li { margin: 0 0 8px; }
+  .status { border-left: 3px solid var(--accent); padding: 4px 0 4px 16px; }
+  .formula { font-family: "Cambria Math", "STIX Two Math", Georgia, serif; text-align: center; margin: 8px 0 18px; font-size: 19px; }
+  footer { margin-top: 64px; font: 12px/1.5 system-ui, sans-serif; color: var(--quiet); }
+  table { width:100%; border-collapse: collapse; font: 14px/1.45 system-ui, sans-serif; margin: 4px 0 12px; font-variant-numeric: tabular-nums; }
+  th, td { text-align:left; padding: 7px 8px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { color: var(--quiet); font-weight: 600; }
+  .tool { font: 15px/1.5 system-ui, sans-serif; margin: 8px 0 20px; padding: 16px; border: 1px solid var(--rule); border-radius: 8px; }
+  .row { display:flex; align-items:center; gap:12px; margin: 0 0 10px; flex-wrap: wrap; }
+  .row label { width: 190px; flex: none; color: var(--quiet); }
+  .row input[type=text], .row input[type=number] { flex: 1; min-width: 120px; font: 15px ui-monospace, monospace; padding: 6px 8px; border: 1px solid var(--rule); border-radius: 6px; background: transparent; color: var(--ink); }
+  .row input[type=range] { flex: 1; min-width: 140px; accent-color: var(--accent); }
+  .row output { min-width: 40px; text-align: right; font-variant-numeric: tabular-nums; }
+  .note { color: var(--quiet); font-size: 14px; }
+  .ok { color: var(--ok); font-weight: 600; } .bad { color: var(--bad); font-weight: 600; }
+  .sources li { font-size: 16px; }
+  code { font: 14px ui-monospace, SFMono-Regular, Menlo, monospace; }
+  pre { font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; border: 1px solid var(--rule); border-radius: 8px; padding: 12px 14px; overflow-x: auto; margin: 4px 0 16px; }
+</style>
+<body>
+<main>
+  <h1>The Riemann Hypothesis</h1>
+  <p class="lede">What the statement says, before any proof: one function, the places where it is zero, and what those places tell us about the prime numbers.</p>
+  <p><a href="index.html">The architecture of a proof</a> &nbsp; <a href="map.html">The map</a> &nbsp; <a href="stepanov.html">Stepanov's method</a></p>
+
+  <h2>A function built from the primes</h2>
+  <p>Add up the reciprocals of all whole numbers raised to a power s:</p>
+  <p class="formula">&zeta;(s) = 1 + 1/2<sup>s</sup> + 1/3<sup>s</sup> + 1/4<sup>s</sup> + &hellip;</p>
+  <p>The sum makes sense when s is larger than 1. Euler noticed in the eighteenth century that, because every whole number splits into primes in exactly one way, the same sum is a product with one factor for each prime:</p>
+  <p class="formula">&zeta;(s) = &prod;<sub>p</sub> 1 / (1 &minus; p<sup>&minus;s</sup>)</p>
+  <p>So &zeta; is a way of packing all the primes into one function. In 1859 Riemann let s be a complex number, s = &sigma; + it, and showed that the function extends to the whole complex plane, with a single exception at s = 1, where it becomes infinite. He also found a symmetry: the values at s and at 1 &minus; s are tied by an explicit formula, the functional equation.</p>
+
+  <h2>Where the function is zero</h2>
+  <p>Some zeros are easy to find. The functional equation forces &zeta; to vanish at &minus;2, &minus;4, &minus;6, and so on. These are called the trivial zeros. Every other zero lies in the strip where the real part &sigma; is strictly between 0 and 1, and the zeros there come in mirror pairs across the vertical line &sigma; = 1/2.</p>
+  <p class="status"><strong>The Riemann Hypothesis.</strong> Every zero of &zeta; other than the trivial ones has real part exactly 1/2.</p>
+  <p>What was known before November 2026:</p>
+  <ul>
+    <li>No zero has real part 1. Hadamard and de la Vall&eacute;e Poussin proved this in 1896, and it is exactly what gives the prime number theorem: the number of primes up to x is about x / ln x.</li>
+    <li>Infinitely many zeros lie on the line (Hardy, 1914), and more than 40 per cent of them do (Conrey, 1989).</li>
+    <li>Every zero with imaginary part between 0 and 3&middot;10<sup>12</sup> is on the line, checked rigorously by computer (Platt and Trudgian, 2021).</li>
+  </ul>
+  <p>None of this excludes a zero off the line further up. That is the whole question.</p>
+
+  <h2>Why the zeros matter for the primes</h2>
+  <p>Let &pi;(x) be the number of primes up to x. The best simple approximation to it is the logarithmic integral li(x), the area under 1/ln t from 0 to x. Riemann's explicit formula writes the difference &pi;(x) &minus; li(x) as a sum of waves, one for each zero. A zero with real part &sigma; produces a wave whose size grows like x<sup>&sigma;</sup>. If every zero sits on the line, every wave grows like &radic;x, and the primes are as evenly spread as they can be. A single zero further to the right would make the error larger, at that rate, forever.</p>
+  <p>This is an exact equivalence. Von Koch showed in 1901 that the hypothesis holds if and only if &pi;(x) &minus; li(x) is at most a constant times &radic;x &middot; ln x. In 1976 Schoenfeld made the constant explicit: the hypothesis implies</p>
+  <p class="formula">|&pi;(x) &minus; li(x)| &lt; &radic;x &middot; ln x / (8&pi;) &nbsp;&nbsp; for every x &ge; 2657</p>
+  <p>So the hypothesis is, in the end, a statement about counting primes. The exponent 1/2 is the size of the error.</p>
+
+  <h2>Check it yourself</h2>
+  <div class="tool">
+    <div class="row"><label for="nx">count primes up to x =</label><input type="number" id="nx" value="1000000" min="100" max="10000000" step="1"></div>
+    <div class="row"><span class="note">x up to 10 000 000; the count runs in your browser.</span></div>
+    <div id="out" class="note"></div>
+  </div>
+  <table>
+    <tr><th>x</th><th>&pi;(x)</th><th>li(x)</th><th>&pi;(x) &minus; li(x)</th><th>&radic;x ln x / 8&pi;</th><th>error / bound</th></tr>
+    <tr><td>1 000</td><td>168</td><td>177.6</td><td>&minus;9.6</td><td>8.7</td><td class="bad">1.106</td></tr>
+    <tr><td>2 657</td><td>384</td><td>399.6</td><td>&minus;15.6</td><td>16.2</td><td class="ok">0.964</td></tr>
+    <tr><td>10 000</td><td>1 229</td><td>1 246.1</td><td>&minus;17.1</td><td>36.6</td><td class="ok">0.468</td></tr>
+    <tr><td>100 000</td><td>9 592</td><td>9 629.8</td><td>&minus;37.8</td><td>144.9</td><td class="ok">0.261</td></tr>
+    <tr><td>1 000 000</td><td>78 498</td><td>78 627.5</td><td>&minus;129.5</td><td>549.7</td><td class="ok">0.236</td></tr>
+    <tr><td>10 000 000</td><td>664 579</td><td>664 918.4</td><td>&minus;339.4</td><td>2 028.0</td><td class="ok">0.167</td></tr>
+  </table>
+  <p>At x = 1000 the error is still larger than the bound; that is why Schoenfeld's inequality starts at 2657. From there on the error stays well inside.</p>
+  <p class="note">What this check cannot do: test the hypothesis. Every x in this range, and far beyond it, is already settled without the hypothesis: the inequality is proved unconditionally for 2657 &le; x &le; 1.1&middot;10<sup>26</sup> from the computed zeros (Johnston, 2021). The table shows the size of error the hypothesis promises, not evidence for it.</p>
+
+  <h2>The generalization: Dirichlet L-functions</h2>
+  <p>To count primes in a progression, say primes that leave remainder 3 when divided by 10, one weights each 1/n<sup>s</sup> by a Dirichlet character &chi;, a function that repeats with period q and respects multiplication. The result is a Dirichlet L-function L(s, &chi;), with its own Euler product over the primes and its own functional equation. The Generalized Riemann Hypothesis for Dirichlet L-functions says the same thing for each of them: apart from trivial zeros, every zero has real part 1/2. It controls how evenly primes are spread among the remainders, with error of size &radic;x, just as the original controls &pi;(x). The zeta function is the case of the trivial character.</p>
+
+  <h2>The exact statement in the archive</h2>
+  <p>The archive does not define the hypothesis itself. Its main theorem uses the definition in Mathlib, Lean's mathematics library, written before the announcement:</p>
+  <pre><code>def RiemannHypothesis : Prop :=
+  &forall; (s : &#8450;) (_ : riemannZeta s = 0)
+    (_ : &not;&exist; n : &#8469;, s = -2 * (n + 1)) (_ : s &ne; 1),
+    s.re = 1 / 2
+
+theorem riemannHypothesis : RiemannHypothesis</code></pre>
+  <p>Read aloud: for every complex s, if &zeta;(s) = 0, s is not one of &minus;2, &minus;4, &minus;6, &hellip;, and s is not 1, then the real part of s is 1/2. The same Mathlib file proves that riemannZeta is the usual function: it equals the sum of 1/n<sup>s</sup> when the real part of s is above 1, it has the trivial zeros, and it satisfies the functional equation. At s = 1 Mathlib gives the function an arbitrary value, so excluding that point weakens nothing.</p>
+  <p>Four more theorems in the archive's Main.lean concern Dirichlet L-functions. The independent checks found that all five match the statements in the challenge file.</p>
+
+  <h2>Half a strip is enough</h2>
+  <p>The map ends on a weaker-looking line: no Dirichlet L-function has a zero with real part above 1/2. In the archive all five theorems follow from that one statement, which the code calls EveryCharacter. The reason is the mirror symmetry. The functional equation pairs a zero at s with a zero at 1 &minus; s (for &zeta;), or with a zero of the conjugate character's L-function at the mirror point (for a primitive character). A zero to the left of the line would therefore have a partner to the right. Rule out the right half of the strip for every character at once, and the left half is ruled out too; what remains is the line. This step is classical, and in the archive it uses only Mathlib.</p>
+  <p>So the whole proof is aimed at one thing: showing that nothing on the right of the line can be a zero. How it does that is the rest of this site. The top row of <a href="map.html">the map</a> is the chain of conclusions that ends here, <a href="dirichlet.html">why only Dirichlet</a> explains where the method stops, and <a href="stepanov.html">Stepanov's method</a> is the 1969 proof of the same kind of statement for curves over finite fields that our reading starts from.</p>
+
+  <h2>Sources</h2>
+  <ul class="sources">
+    <li>B. Riemann, Ueber die Anzahl der Primzahlen unter einer gegebenen Gr&ouml;sse, Monatsberichte der Berliner Akademie, 1859. The extension of &zeta;, the functional equation, the explicit formula.</li>
+    <li>L. Schoenfeld, Sharper bounds for the Chebyshev functions &theta;(x) and &psi;(x). II, Math. Comp. 30 (1976), 337&ndash;360. <a href="https://doi.org/10.2307/2005976">doi:10.2307/2005976</a>. Corollary 1: the bound used in the check. The equivalence itself is von Koch, Acta Math. 24 (1901), 159&ndash;182.</li>
+    <li>D. Platt and T. Trudgian, The Riemann hypothesis is true up to 3&middot;10<sup>12</sup>, Bull. London Math. Soc. 53:3 (2021), 792&ndash;797. <a href="https://arxiv.org/abs/2004.09765">arXiv:2004.09765</a>.</li>
+    <li>D. R. Johnston, Improving bounds on prime counting functions by partial verification of the Riemann hypothesis. <a href="https://arxiv.org/abs/2109.02249">arXiv:2109.02249</a>. Schoenfeld's inequality without the hypothesis up to 1.1&middot;10<sup>26</sup>.</li>
+    <li>D. Loeffler and M. Stoll, Formalizing zeta and L-functions in Lean. <a href="https://arxiv.org/abs/2503.00959">arXiv:2503.00959</a>. How &zeta;, Dirichlet L-functions and the formal statement entered Mathlib.</li>
+    <li>Mathlib, <a href="https://leanprover-community.github.io/mathlib4_docs/Mathlib/NumberTheory/LSeries/RiemannZeta.html">Mathlib.NumberTheory.LSeries.RiemannZeta</a>; the definition at the commit the archive pins (0df444a3) is quoted in ishaan2006/rh-lean-reproduction, <a href="https://github.com/ishaan2006/rh-lean-reproduction/blob/main/results/statement_check.txt">results/statement_check.txt</a>, which also records the reduction to EveryCharacter.</li>
+  </ul>
+  <p class="status">The history and the formal statement are from these sources. The description of the zeros as waves is the standard informal picture of Riemann's explicit formula, not a precise statement.</p>
+
+  <footer>
+    <p>Corrections are welcome: <a href="https://github.com/revenue7-eng/reading-proofs/issues">open an issue</a>.</p>
+  </footer>
+</main>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var G = 0.5772156649015329;
+  function li(x) {
+    var L = Math.log(x), s = 0, t = 1;
+    for (var k = 1; k < 400; k++) { t *= L / k; s += t / k; if (t / k < 1e-17 * s) break; }
+    return G + Math.log(L) + s;
+  }
+  function primePi(n) {
+    var s = new Uint8Array(n + 1), c = 0, i, j;
+    for (i = 2; i <= n; i++) {
+      if (!s[i]) { c++; if (i <= n / i) for (j = i * i; j <= n; j += i) s[j] = 1; }
+    }
+    return c;
+  }
+  function fmt(v, d) { return v.toLocaleString('en-US', {minimumFractionDigits: d, maximumFractionDigits: d}).replace(/,/g, '\u2009'); }
+  function run() {
+    var x = Math.floor(Number($('nx').value));
+    if (!(x >= 100 && x <= 10000000)) { $('out').textContent = 'Choose x between 100 and 10 000 000.'; return; }
+    var p = primePi(x), l = li(x), d = p - l, b = Math.sqrt(x) * Math.log(x) / (8 * Math.PI), r = Math.abs(d) / b;
+    var ok = r < 1;
+    $('out').innerHTML = '&pi;(x) = ' + fmt(p, 0) + ', li(x) = ' + fmt(l, 1) + ', difference ' + fmt(d, 1).replace('-', '\u2212') +
+      ', bound ' + fmt(b, 1) + ', ratio <span class="' + (ok ? 'ok' : 'bad') + '">' + r.toFixed(3) + '</span>' +
+      (x < 2657 ? ' (below 2657 the bound is not claimed)' : '');
+  }
+  $('nx').addEventListener('change', run);
+  $('nx').addEventListener('input', function () { clearTimeout(run.t); run.t = setTimeout(run, 300); });
+  run();
+})();
+</script>
+</body>
+</html>

@@ -45,7 +45,7 @@
 {"id":"e42","color":"white","h":72,"size":"body","text":"**Residual on windows**\nGm(x) ≤ x^(1/2 + cε)","type":"shape","w":380,"x":848,"y":-310},
 {"id":"e43","color":"white","h":72,"size":"body","text":"**Landau lemma, window form**\na zero would spoil every window","type":"shape","w":380,"x":1308,"y":-470},
 {"id":"e44","href":"dirichlet.html","color":"white","h":72,"size":"body","text":"**All Dirichlet L-functions**\nno zeros with Re s > 1/2","type":"shape","w":380,"x":1308,"y":-310},
-{"id":"e45","color":"white","h":64,"size":"large","stroke":"ink","text":"Riemann Hypothesis","type":"shape","w":300,"x":1768,"y":-306},
+{"id":"e45","href":"hypothesis.html","color":"white","h":64,"size":"large","stroke":"ink","text":"Riemann Hypothesis","type":"shape","w":300,"x":1768,"y":-306},
 {"id":"e75","color":"white","h":96,"size":"body","text":"**Step 1: sum over primes as a divisibility count**\nLegendre over inert p, weight 1 − χ_K;\nsorted by the characters of the same CM field","type":"shape","w":440,"x":328,"y":-494},
 {"id":"e36","size":"title","text":"What Alpöge's proof is built from","type":"text","x":-720,"y":-800},
 {"id":"e37","size":"large","text":"Five steps after Stepanov, four supports beneath; the new part is in the multiplicity","type":"text","x":-720,"y":-730},

@@ -71,7 +71,7 @@ const EL = __BOARD__;
 const NS = 'http://www.w3.org/2000/svg', XH = 'http://www.w3.org/1999/xhtml';
 const svg = document.getElementById('map');
 const byId = Object.fromEntries(EL.map(e => [e.id, e]));
-const PAGES = {'size.html':'The right size','frobenius.html':'A Frobenius at every inert prime','ladder.html':'The ladder of lifts','prohibition.html':'The prohibition','degenerate.html':'Few bad members','integrality.html':'Whole numbers on every rung','integer.html':'One integer for every l','family.html':'The family exists','balance.html':'The balance','stepanov.html':"Stepanov's method",'compare.html':'Stepanov and the new proof, side by side','dirichlet.html':'Why only Dirichlet'};
+const PAGES = {'hypothesis.html':'What the hypothesis says','size.html':'The right size','frobenius.html':'A Frobenius at every inert prime','ladder.html':'The ladder of lifts','prohibition.html':'The prohibition','degenerate.html':'Few bad members','integrality.html':'Whole numbers on every rung','integer.html':'One integer for every l','family.html':'The family exists','balance.html':'The balance','stepanov.html':"Stepanov's method",'compare.html':'Stepanov and the new proof, side by side','dirichlet.html':'Why only Dirichlet'};
 function tipText(h) { const [f, a] = h.split('#'); const name = PAGES[f] || f; return '\u2192 ' + name + (a ? (a.startsWith('b-') ? ' \u00b7 its row' : ' \u00b7 its section') : ''); }
 function s(tag, attrs, parent) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); (parent || root).appendChild(e); return e; }
 function inline(parent, line) {
