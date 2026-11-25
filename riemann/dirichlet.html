@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why only Dirichlet: where the method stops</title>
+<meta name="description" content="One part of the proof of the Riemann Hypothesis, as we read it: the method proves the hypothesis for Dirichlet L-functions and no further. It leans on abelian structure twice, and beyond it, for GL(2) without complex multiplication, the same pieces fail in known ways.">
+<style>
+  :root { --ink:#1d1d1b; --quiet:#5b5b57; --rule:#e3e1da; --bg:#fbfaf7; --accent:#2f5d8a; --pink:#f9d9df; --ok:#2e7d4f; }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink:#ecebe6; --quiet:#a9a8a2; --rule:#3a3a37; --bg:#191918; --accent:#8fb6dc; --pink:#4a2f35; --ok:#7fcf9d; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font: 18px/1.6 Georgia, "Iowan Old Style", "Times New Roman", serif; }
+  main { max-width: 680px; margin: 0 auto; padding: 64px 24px 96px; }
+  h1 { font-size: 40px; line-height:1.15; margin:0 0 16px; font-weight: 600; }
+  .lede { font-size: 21px; color: var(--quiet); margin: 0 0 32px; }
+  h2 { font: 600 15px/1.4 system-ui, sans-serif; letter-spacing:.06em; text-transform:uppercase; color:var(--quiet); margin: 44px 0 12px; padding-top: 22px; border-top: 1px solid var(--rule); }
+  p { margin: 0 0 16px; }
+  ol { margin: 0 0 16px; padding-left: 24px; }
+  li { margin: 0 0 8px; }
+  a { color: var(--accent); }
+  .status { border-left: 3px solid var(--accent); padding: 4px 0 4px 16px; }
+  footer { margin-top: 64px; font: 12px/1.5 system-ui, sans-serif; color: var(--quiet); }
+  table { width:100%; border-collapse: collapse; font: 14px/1.45 system-ui, sans-serif; margin: 4px 0 16px; }
+  th, td { text-align:left; padding: 7px 8px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { color: var(--quiet); font-weight: 600; }
+  td.breaks { background: var(--pink); }
+  .src { display:block; margin-top:3px; color:var(--quiet); font-size:12px; }
+  tr:target td { background:#fff1c2; }
+  h2:target { color:var(--accent); }
+  tr, h2 { scroll-margin-top: 24px; }
+  @media (prefers-color-scheme: dark) { tr:target td { background:#4a4220; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Why only Dirichlet</h1>
+  <p class="lede">The proof claims the Riemann Hypothesis for the zeta function and for every Dirichlet L-function, and nothing more. As we read it, that is not caution: the method stops where the free Frobenius stops.</p>
+  <p><a href="index.html">The architecture of a proof</a> &nbsp; <a href="map.html">The map</a> &nbsp; <a href="compare.html">Stepanov and the new proof</a></p>
+
+  <h2>Why it matters</h2>
+  <p>Dirichlet L-functions belong to abelian extensions of the rational numbers: the primes are sorted by their class in a finite abelian group, and each character of that group has its own L-function. A proof about abelian objects that uses abelian structure is using the structure of the problem, not leaning on a crutch. The question worth asking is the next one: which parts of the argument would survive one step beyond, and which would not.</p>
+  <p>The natural step beyond is GL(2): the L-function of an elliptic curve, or of a modular form, without complex multiplication. Below we take the pieces of <a href="map.html">the map</a> one at a time and ask what happens to each there.</p>
+
+  <h2 id="two-uses">Abelian structure, used twice</h2>
+  <ol>
+    <li><strong>Sorting makes the weights whole.</strong> Divisibility can only count with whole, non-negative weights. The sum over primes can be assembled from such weights because the primes are sorted into the classes of a finite abelian group: inside each class the count is non-negative, and the complex characters are recovered from the classes by orthogonality. See the first row of <a href="compare.html">the dictionary</a>.</li>
+    <li><strong>One field serves every place.</strong> A single CM field gives a local Frobenius at every inert prime, because a curve with complex multiplication by it is supersingular at exactly those primes, and the same field supplies a period with the constant the main term needs. See <a href="frobenius.html">a Frobenius at every inert prime</a> and <a href="size.html">the right size</a>.</li>
+  </ol>
+  <p>The two facts behind the odd powers in the weight and behind the height-two formal group are the same fact: at an inert prime the residue field has p² elements.</p>
+
+  <h2 id="piece-by-piece">Piece by piece</h2>
+  <p>The middle column is what the proof uses. The right column is what is known about the same piece for GL(2) without complex multiplication. Shaded cells are where, as we read it, the method breaks.</p>
+  <table>
+    <tr><th>Piece</th><th>Dirichlet</th><th>GL(2) without CM</th></tr>
+    <tr id="b-weight"><td>Weight on the primes<span class="src"><a href="compare.html">the dictionary</a></span></td><td>1 − χ<sub>K</sub>(p): 0 or 2, whole and non-negative</td><td class="breaks">a<sub>f</sub>(p), which changes sign: the normalized traces follow the Sato–Tate distribution, symmetric about zero<span class="src"><a href="https://www.doi.org/10.2977/PRIMS/31">Barnet-Lamb, Geraghty, Harris, Taylor 2011</a></span></td></tr>
+    <tr id="b-sort"><td>Sorting the primes<span class="src"><a href="compare.html">the dictionary</a></span></td><td>classes of a finite abelian group</td><td class="breaks">no finite sorting; sorting by a<sub>f</sub>(p) modulo a prime power gives L-functions of finite images (Artin), not the L-function of f itself (our reasoning)</td></tr>
+    <tr id="b-e9"><td>Local multiplicity<span class="src"><a href="frobenius.html#b-e9">Deuring, 1941</a></span></td><td>a CM curve is supersingular at every inert prime, half of all primes<span class="src"><a href="https://arxiv.org/abs/1311.5454">Deuring's criterion, as stated by Blake</a></span></td><td class="breaks">supersingular primes have density zero (Serre, 1981), though there are infinitely many (Elkies, 1987)<span class="src"><a href="https://arxiv.org/abs/1307.5346">both as cited by Walji</a></span></td></tr>
+    <tr id="b-e7"><td>Archimedean size<span class="src"><a href="size.html#b-e7">Chowla–Selberg</a></span></td><td>the CM period gives L′/L(1, χ<sub>K</sub>), the constant the main term needs</td><td class="breaks">the known formulas expressing a height through logarithmic derivatives of L-functions are for CM abelian varieties: the averaged Colmez conjecture, proved in 2018, with Chowla–Selberg as its first case; we know of no such formula for a curve without CM<span class="src"><a href="https://doi.org/10.4007/annals.2018.187.2.4">Yuan, Zhang 2018</a>; <a href="https://annals.math.princeton.edu/2018/187-2/p03">Andreatta, Goren, Howard, Madapusi Pera 2018</a></span></td></tr>
+    <tr id="b-e24"><td>Selmer groups<span class="src"><a href="integer.html#b-e24">one integer for every l</a></span></td><td>Iwasawa's μ-invariant vanishes for abelian fields<span class="src"><a href="https://doi.org/10.2307/1971116">Ferrero, Washington 1979</a></span></td><td>beyond abelian fields the vanishing of μ is open; a Kato-type Euler system covers part of the ground. Costlier, but not the first obstacle</td></tr>
+    <tr><td>Frame, slopes, balance, the tower of lifts</td><td>work</td><td>nothing in them is abelian, as far as we read; not checked</td></tr>
+  </table>
+
+  <h2>What would extend, and what would not</h2>
+  <p>Both uses of abelian structure fail for GL(2) without complex multiplication, while the machinery around them does not depend on it. The plausible extensions are therefore the ones that keep a CM field: Hecke L-functions of CM fields, modular forms with complex multiplication, perhaps Artin L-functions with finite image. This fits the announcement, which claims Dirichlet L-functions and stops there. We have not tried any extension and do not claim that one works.</p>
+  <p>The author's own view points the same way (<a href="https://x.com/__alpoge__/status/2124987173439209561">post of 24 November 2026</a>): over number fields there is no known object of the kind written H¹ on which a single Frobenius acts, and he reads any real difficulty as a sign that the present setup is clumsy. In our terms, the free Frobenius that a CM field supplies to abelian problems is exactly what such an object would supply in general. That gloss is ours, not his.</p>
+
+  <h2>What we have and have not read</h2>
+  <p class="status">This page is our analysis, not the author's account and not a part of the archive. The left two columns follow our reading of the formal proof. The facts in the right column are taken from the cited sources; what we infer from them about the method is marked as our reasoning. We have not checked whether the frame, the slopes or the balance carry over in detail.</p>
+
+  <footer>
+    <p>Corrections are welcome: <a href="https://github.com/revenue7-eng/reading-proofs/issues">open an issue</a>.</p>
+  </footer>
+</main>
+</body>
+</html>
