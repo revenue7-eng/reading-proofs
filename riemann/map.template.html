@@ -49,12 +49,14 @@
   .arr.dash { stroke-dasharray:6 5; }
   .alab { font-size:14px; fill:var(--quiet); }
   .mk { fill:var(--line); }
+  .link { cursor:pointer; }
+  .shape.link:hover rect, .sect.link:hover rect { stroke:var(--line); stroke-width:2.4; }
 </style>
 </head>
 <body>
 <div class="bar">
   <a href="index.html">&larr; The architecture of a proof</a>
-  <span class="st">Our reading of a formal proof announced on 20 November 2026, not peer reviewed. Drag to move, scroll or use the buttons to zoom.</span>
+  <span class="st">Our reading of a formal proof announced on 20 November 2026, not peer reviewed. Drag to move, scroll to zoom, click a card to open its page.</span>
   <button id="zin" title="Zoom in">+</button><button id="zout" title="Zoom out">&minus;</button><button id="zfit" class="w" title="Fit the whole map">Fit</button>
 </div>
 <svg id="map" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Map of what the proof is built from"></svg>
@@ -89,12 +91,14 @@ const box = {};
 
 for (const e of EL) {
   if (e.type === 'container') {
-    const g = s('g', {class:'sect'}, gSect);
+    const g = s('g', {class:'sect' + (e.href ? ' link' : '')}, gSect);
+    if (e.href) g.setAttribute('data-href', e.href);
     const rc = s('rect', {x:e.x, y:e.y, width:e.w, height:e.h, rx:12}, g);
     const t = s('text', {x:e.x + 4, y:e.y - 10}, g); t.textContent = e.text;
     box[e.id] = {x:e.x, y:e.y, w:e.w, h:e.h, sect:true, rect:rc};
   } else if (e.type === 'shape') {
-    const g = s('g', {class:'shape' + (e.color === 'pink' ? ' pink' : '') + (e.stroke ? ' s-' + e.stroke : '')}, gTop);
+    const g = s('g', {class:'shape' + (e.color === 'pink' ? ' pink' : '') + (e.stroke ? ' s-' + e.stroke : '') + (e.href ? ' link' : '')}, gTop);
+    if (e.href) g.setAttribute('data-href', e.href);
     s('rect', {x:e.x, y:e.y, width:e.w, height:e.h, rx:10}, g);
     const [fo, d] = html(g, e.x, e.y, e.w, e.h, 'fo sz-' + (e.size || 'body') + (e.textAlign === 'left' ? ' left' : ''));
     d.style.height = 'auto'; d.style.minHeight = '100%';
@@ -182,9 +186,15 @@ function zoom(f, cx, cy) {
 }
 svg.addEventListener('wheel', ev => { ev.preventDefault(); zoom(Math.exp(ev.deltaY * 0.0015), ev.clientX, ev.clientY); }, {passive:false});
 let drag = null;
-svg.addEventListener('pointerdown', ev => { drag = {x:ev.clientX, y:ev.clientY, vx:vb.x, vy:vb.y}; svg.setPointerCapture(ev.pointerId); svg.classList.add('drag'); });
-svg.addEventListener('pointermove', ev => { if (!drag) return; const k = vb.w / svg.getBoundingClientRect().width; vb.x = drag.vx - (ev.clientX - drag.x) * k; vb.y = drag.vy - (ev.clientY - drag.y) * k; apply(); });
-svg.addEventListener('pointerup', () => { drag = null; svg.classList.remove('drag'); });
+svg.addEventListener('pointerdown', ev => { drag = {x:ev.clientX, y:ev.clientY, vx:vb.x, vy:vb.y, moved:false}; svg.setPointerCapture(ev.pointerId); svg.classList.add('drag'); });
+svg.addEventListener('pointermove', ev => { if (!drag) return; if (Math.abs(ev.clientX - drag.x) + Math.abs(ev.clientY - drag.y) > 5) drag.moved = true; const k = vb.w / svg.getBoundingClientRect().width; vb.x = drag.vx - (ev.clientX - drag.x) * k; vb.y = drag.vy - (ev.clientY - drag.y) * k; apply(); });
+svg.addEventListener('pointerup', ev => {
+  const click = drag && !drag.moved; drag = null; svg.classList.remove('drag');
+  if (!click) return;
+  const hit = document.elementFromPoint(ev.clientX, ev.clientY);
+  const a = hit && hit.closest('[data-href]');
+  if (a) window.location.href = a.getAttribute('data-href');
+});
 document.getElementById('zin').onclick = () => zoom(0.8);
 document.getElementById('zout').onclick = () => zoom(1.25);
 document.getElementById('zfit').onclick = fit;
