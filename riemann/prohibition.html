@@ -50,9 +50,15 @@
   <p>As we read the archive, this is done with a nearly orthogonal frame: a family of subspaces, together about 20 times the dimension of the target, that overlap no more than random ones would. Such a frame comes from the discrete series of a large unitary group U(r), through Schur orthogonality and the fast decay of matrix coefficients.</p>
   <p>The constant here looks frightening: a rank r of at least 1801. It is a safety margin, not a sharp threshold; we checked by computer that it is not where the argument is tight. The large gap between parameters that the archive also asks for does its work elsewhere, in the counting theorem behind <a href="degenerate.html">the next support</a>.</p>
 
-  <h2>Where our reading differs from Rubinstein's guide</h2>
-  <p class="status">Rubinstein's guide describes the step that spreads the images evenly through a relative trace formula of Jacquet and an approximate orthogonality. We describe it through the discrete series of U(r) and Schur orthogonality. We read this layer only at the level of statements, so on this point his description deserves more trust than ours. Both readings agree on what the step must deliver: images spread evenly enough that the slope inequality controls every direction.</p>
-
+  <h2 id="two-sides">Two sides of one identity</h2>
+  <p>Rubinstein's guide describes the step that spreads the images evenly through a relative trace formula of Jacquet and an approximate orthogonality. We had described it through the discrete series of U(r) and Schur orthogonality. Reading the proof of <code>LinkS</code> in the code shows that these are two sides of the same argument, not two different arguments. All the declarations below are on the list of what the final theorem depends on (<a href="https://github.com/ishaan2006/rh-lean-reproduction">ishaan2006/rh-lean-reproduction</a>, <code>results/used_decls.txt.gz</code>).</p>
+  <p>The central statement, theorem S (<code>ThmSOwn</code>), is by definition four bounds on the cross kernel <code>Kmat</code> between two words u and u′ (<code>thmSOwn_of_clauses</code>): two on the diagonal and two off it. On the diagonal the kernel is the identity up to a small error; off the diagonal it is small in the Hilbert–Schmidt norm. That is the approximate orthogonality.</p>
+  <table>
+    <tr><th>Side</th><th>What it does</th><th>In the code</th></tr>
+    <tr><td>Spectral (our reading)</td><td>the main term on the diagonal: discrete series, formal degree, Schur orthogonality</td><td><code>IsDS</code>, <code>WuDecay</code>, <code>RowsFinDim</code>; the clauses <code>ClDiag</code>, <code>ClKppDiag</code></td></tr>
+    <tr><td>Geometric (Rubinstein's)</td><td>the kernel expanded over cosets, with sums of Kloosterman type, bounded off the diagonal</td><td><code>kloostermanCosetSum_le</code>, <code>kloostermanDiagonalThreshold</code>; the clauses <code>ClOff</code>, <code>ClKppOff</code></td></tr>
+  </table>
+  <p class="status">An expansion of a kernel of Bessel periods over double cosets, with orbital terms of Kloosterman type, is the shape of a relative trace formula, and this is what we see in the code. We have not compared it with Jacquet's formula as it stands in the literature, and we read the geometric side only at the level of statements. Both readings agree on what the step must deliver: images spread evenly enough that the slope inequality controls every direction.</p>
   <h2>What it is built from</h2>
   <table>
     <tr><th>Piece</th><th>Known from</th><th>In the archive</th><th>How deep we read</th></tr>
