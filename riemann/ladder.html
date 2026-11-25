@@ -98,7 +98,15 @@
 
   <h2>What we have and have not read</h2>
   <p class="status">This page is our reading of the formal proof, not the author's account. We followed the pieces above down to their published sources, except the first, which we read as a statement. The layer that spreads the images of the maps evenly, which by Rubinstein's guide rests on a relative trace formula of Jacquet, we read only at the level of statements.</p>
-  <p class="status">A different reading. <a href="https://hexagonmath.org/pdf/2611.00799v1">Jaswal's guide</a> describes the lower bound for the gains of all the lifts together differently: as LinkG, proved without the theta kernels, through a divisibility of minors (linkG_without_kernels, key_minor_dvd). It does not mention a Hecke polynomial, and the names in the table above do not appear in it. We have not yet reconciled the two readings; until we check which declarations the final theorem uses here, read the mechanism on this page as our reading, not as settled.</p>
+  <h2 id="two-mechanisms">Two mechanisms, both used</h2>
+  <p><a href="https://hexagonmath.org/pdf/2611.00799v1">Jaswal's guide</a> describes the lower bound for the gains of all the lifts together differently from this page: as <code>LinkG</code>, proved without the theta kernels, through a divisibility of minors (<code>linkG_without_kernels</code>, <code>key_minor_dvd</code>). It does not mention a Hecke polynomial. We checked both against the list of declarations the final theorem depends on, which <a href="https://github.com/ishaan2006/rh-lean-reproduction">ishaan2006/rh-lean-reproduction</a> extracted from the published export (<code>results/used_decls.txt.gz</code>). Both are on it.</p>
+  <table>
+    <tr><th>Mechanism</th><th>Declarations on the list</th></tr>
+    <tr><td>The Hecke polynomial, carried along the chain (this page)</td><td><code>KernelCommutationUpToUnits</code>, <code>theorem_of_alternate_form</code>, <code>Conclusion4</code>, <code>LowTermBound</code>, then <code>stmtAt_proved</code> into <code>sum_over_primes_service</code></td></tr>
+    <tr><td>Divisibility of minors, without theta kernels (Jaswal)</td><td><code>linkG_without_kernels</code>, <code>key_minor_dvd</code></td></tr>
+  </table>
+  <p>So the two readings do not contradict each other: they describe two different parts of the same place. As a control, two declarations from the same file as <code>Conclusion4</code> that the proof does not need, <code>DegreeDichotomyWithModelBounds</code> and <code>ClosedFormOfAdmitted</code>, are absent from the list. We did not rebuild the list from the export ourselves.</p>
+  <p class="status">Still open: which of the two plays the part of Stepanov's multiplicity, the gain that repeats on every rung. The list says that both are used, not what each one does.</p>
 
   <footer>
     <p>Corrections are welcome: <a href="https://github.com/revenue7-eng/reading-proofs/issues">open an issue</a>.</p>
