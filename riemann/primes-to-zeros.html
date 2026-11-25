@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>From primes to zeros: the top row of the map</title>
+<meta name="description" content="The top row of the map of the Lean proof of the Riemann Hypothesis: a sum over primes written as a Legendre-type count of divisibility at inert primes, the square-root bound on a smoothed prime sum, and a window form of Landau's theorem that turns the bound into the absence of zeros. Read from the archive, with a live check.">
+<style>
+  :root { --ink:#1d1d1b; --quiet:#5b5b57; --rule:#e3e1da; --bg:#fbfaf7; --accent:#2f5d8a; --ok:#2e7d4f; --bad:#a8552f; }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink:#ecebe6; --quiet:#a9a8a2; --rule:#3a3a37; --bg:#191918; --accent:#8fb6dc; --ok:#7fcf9d; --bad:#e09a72; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font: 18px/1.6 Georgia, "Iowan Old Style", "Times New Roman", serif; }
+  main { max-width: 680px; margin: 0 auto; padding: 64px 24px 96px; }
+  h1 { font-size: 40px; line-height:1.15; margin:0 0 16px; font-weight: 600; }
+  .lede { font-size: 21px; color: var(--quiet); margin: 0 0 32px; }
+  h2 { font: 600 15px/1.4 system-ui, sans-serif; letter-spacing:.06em; text-transform:uppercase; color:var(--quiet); margin: 44px 0 12px; padding-top: 22px; border-top: 1px solid var(--rule); }
+  p { margin: 0 0 16px; }
+  a { color: var(--accent); }
+  ul { padding-left: 22px; margin: 0 0 16px; }
+  li { margin: 0 0 8px; }
+  .status { border-left: 3px solid var(--accent); padding: 4px 0 4px 16px; }
+  .formula { font-family: "Cambria Math", "STIX Two Math", Georgia, serif; text-align: center; margin: 8px 0 18px; font-size: 19px; }
+  footer { margin-top: 64px; font: 12px/1.5 system-ui, sans-serif; color: var(--quiet); }
+  table { width:100%; border-collapse: collapse; font: 14px/1.45 system-ui, sans-serif; margin: 4px 0 12px; font-variant-numeric: tabular-nums; }
+  th, td { text-align:left; padding: 7px 8px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { color: var(--quiet); font-weight: 600; }
+  .tool { font: 15px/1.5 system-ui, sans-serif; margin: 8px 0 20px; padding: 16px; border: 1px solid var(--rule); border-radius: 8px; }
+  .row { display:flex; align-items:center; gap:12px; margin: 0 0 10px; flex-wrap: wrap; }
+  .row label { width: 190px; flex: none; color: var(--quiet); }
+  .row input[type=text], .row input[type=number] { flex: 1; min-width: 120px; font: 15px ui-monospace, monospace; padding: 6px 8px; border: 1px solid var(--rule); border-radius: 6px; background: transparent; color: var(--ink); }
+  .row input[type=range] { flex: 1; min-width: 140px; accent-color: var(--accent); }
+  .row output { min-width: 40px; text-align: right; font-variant-numeric: tabular-nums; }
+  .note { color: var(--quiet); font-size: 14px; }
+  .ok { color: var(--ok); font-weight: 600; } .bad { color: var(--bad); font-weight: 600; }
+  .sources li { font-size: 16px; }
+  code { font: 14px ui-monospace, SFMono-Regular, Menlo, monospace; }
+  pre { font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; border: 1px solid var(--rule); border-radius: 8px; padding: 12px 14px; overflow-x: auto; margin: 4px 0 16px; }
+</style>
+<body>
+<main>
+  <h1>From primes to zeros</h1>
+  <p class="lede">The top row of the map: how the proof turns a sum over primes into a count of divisibility, what bound it proves on that sum, and how the bound becomes the absence of zeros.</p>
+  <p><a href="index.html">The architecture of a proof</a> &nbsp; <a href="map.html">The map</a> &nbsp; <a href="hypothesis.html">What the hypothesis says</a></p>
+
+  <p>Everything on this page was read from the archive as published (commit 40e56bab0 of the community mirror, the state Sutherland checked), and every Lean name here is on the list of declarations the final theorem depends on. We read the statements and definitions; where we follow someone else's reading of a proof, we say so.</p>
+
+  <h2>The quantity the proof controls</h2>
+  <p>Let &Lambda;(n) be von Mangoldt's function: ln p when n is a power of a prime p, and 0 otherwise. The archive works with a smoothed sum of it (<code>Formalism.Gz</code>):</p>
+  <p class="formula">G(x) = &sum;<sub>n &le; x</sub> &Lambda;(n) (x/n &minus; 1) &minus; x ln x + (1 + &gamma;) x</p>
+  <p>The weight x/n &minus; 1 is a smoothing of the plain count &psi;(x) = &sum;<sub>n &le; x</sub> &Lambda;(n): the sum equals x times the integral of &psi;(t)/t<sup>2</sup> from 1 to x. Its main term is x ln x &minus; (1 + &gamma;) x, so G(x) is the error. For a Dirichlet character &chi; the archive uses the same sum with &Lambda;(n)&chi;(n), whose main term is &minus;x&middot;L&prime;/L(1, &chi;) (<code>Deduction.Gchi</code>).</p>
+  <p>By Riemann's explicit formula, each zero &rho; of &zeta; contributes to G(x) a term of size about x<sup>Re &rho;</sup> / |&rho;|<sup>2</sup>. So G(x) &le; x<sup>1/2 + &epsilon;</sup> for all large x is exactly the kind of statement that rules out zeros to the right of 1/2 + &epsilon;. The rest of this page is how the proof gets there and how it draws the conclusion.</p>
+
+  <h2>Check it yourself</h2>
+  <div class="tool">
+    <div class="row"><label for="gx">G(x) for x =</label><input type="number" id="gx" value="1000000" min="100" max="10000000" step="1"></div>
+    <div class="row"><span class="note">x up to 10 000 000; computed in your browser.</span></div>
+    <div id="gout" class="note"></div>
+  </div>
+  <table>
+    <tr><th>x</th><th>G(x)</th><th>&radic;x</th><th>G(x) / &radic;x</th></tr>
+    <tr><td>1 000</td><td>1.53</td><td>31.6</td><td>0.048</td></tr>
+    <tr><td>10 000</td><td>1.75</td><td>100.0</td><td>0.017</td></tr>
+    <tr><td>100 000</td><td>3.67</td><td>316.2</td><td>0.012</td></tr>
+    <tr><td>1 000 000</td><td>11.04</td><td>1 000.0</td><td>0.011</td></tr>
+    <tr><td>3 000 000</td><td>&minus;4.82</td><td>1 732.1</td><td>&minus;0.003</td></tr>
+    <tr><td>10 000 000</td><td>27.86</td><td>3 162.3</td><td>0.009</td></tr>
+  </table>
+  <p>The error is tiny, far below &radic;x, and it changes sign. That is the smoothing at work: it divides the contribution of each zero by roughly |&rho;|<sup>2</sup>, and the lowest zero already has |&rho;| above 14. As on <a href="hypothesis.html">the hypothesis page</a>, a computation like this cannot test the hypothesis; it shows the size of the quantity the proof has to bound.</p>
+
+  <h2 id="step-1">Step 1: a sum over primes as a count of divisibility</h2>
+  <p>Legendre's formula says how many times a prime p divides a!:</p>
+  <p class="formula">v<sub>p</sub>(a!) = &lfloor;a/p&rfloor; + &lfloor;a/p<sup>2</sup>&rfloor; + &lfloor;a/p<sup>3</sup>&rfloor; + &hellip;</p>
+  <p>Multiply by ln p and add over all p, and you get ln(a!) written as a sum over prime powers: a count of divisibility is a sum of &Lambda;. The archive uses a variant of this count at each prime p that is inert in the CM field K (<code>SizeData₂.vonMangoldtClassSum</code>):</p>
+  <p class="formula">&sum;<sub>i odd</sub> max(0, a/p<sup>i</sup> &minus; w)</p>
+  <p>with the floor replaced by a ramp, a threshold w subtracted, and only odd powers counted. The odd powers at inert primes are exactly where the weight 1 &minus; &chi;<sub>K</sub> lives: &chi;<sub>K</sub>(p<sup>i</sup>) = (&minus;1)<sup>i</sup> when p is inert, so 1 &minus; &chi;<sub>K</sub>(p<sup>i</sup>) is 2 for odd i and 0 for even i, and it is 0 at every split prime. Summed with the factor 2&middot;ln p, as the archive does, the count is the smoothed prime sum with weight 1 &minus; &chi;<sub>K</sub>(n), apart from the ramified primes, which the code treats separately.</p>
+  <p>The proof then sorts this count by characters. <code>Deduction.ch_balance</code> is an exact identity, not an inequality: expanding the count over all characters of a finite abelian group attached to the field (E0 &times; H in the code), by orthogonality of characters, gives</p>
+  <p class="formula">ASK &minus; MAIN = De</p>
+  <p>where ASK is the count, the trivial character contributes the main term a&middot;ln a &minus; (1 + &gamma;)&middot;a of the same shape as in G(x), and De collects the twisted prime sums of the other characters. Because the count is a count of divisibility, it can be compared with how divisible an actual object is. That comparison is the rest of the map: <a href="ladder.html">the ladder</a> makes the objects divisible, <a href="size.html">the size</a> is known exactly, and <a href="prohibition.html">the prohibition</a> says divisibility cannot exceed size. What comes out is ASK &le; MAIN plus errors, and <a href="balance.html">the balance</a> makes the errors of size &radic;x.</p>
+
+  <h2 id="windows">The residual on windows</h2>
+  <p>The output of all that is <code>UpperTheory.Comparison₂.core_gm</code>: for a "level" &Lambda; and every &epsilon; &gt; 0, for all large x, if the hypotheses packaged in <code>EAtH</code> and <code>CoreAtH</code> hold, then</p>
+  <p class="formula">Gm(x) &le; x<sup>1/2 + (e<sub>D</sub> + e<sub>L</sub> + 7)&epsilon;</sup></p>
+  <p>Here Gm (<code>Formalism.HC.Level.Gm</code>) is G(x) plus a weighted sum of the character versions for the characters of the level, each weight positive. The constants e<sub>D</sub> and e<sub>L</sub> are fixed; since &epsilon; is arbitrary, the exponent is 1/2 plus anything.</p>
+  <p>Two things about this bound matter for the next step. It is one-sided: only an upper bound on Gm is proved. And it is only needed on windows, stretches [Y, Y<sup>1+&delta;</sup>] that start arbitrarily far out, not for all large x. According to the trace in ishaan2006 (<a href="https://github.com/ishaan2006/rh-lean-reproduction/blob/main/mechanism/TRACE.md">mechanism/TRACE.md</a>, sections 23 and 24), which we have not checked line by line, the windows are where the rest of the argument can deliver the bound, and the characters other than the target get their bounds from a zero-density estimate, by choosing auxiliary moduli away from the few bad ones.</p>
+
+  <h2 id="landau">Landau's lemma, window form</h2>
+  <p>In 1905 Landau proved that a Dirichlet series with nonnegative coefficients has a singularity on the real axis at the point where it stops converging. Applied to prime sums it says: if a combination of prime sums with nonnegative coefficients grows at most like x<sup>&theta;</sup>, then the corresponding function has no poles to the right of &theta;. The poles come from the zeros of the L-functions, so a one-sided growth bound rules out zeros. Positivity is what makes one side enough.</p>
+  <p>The archive proves a version that needs the bound only on windows (<code>Deduction.zeroFree_of_rpow_window</code>, through <code>Deduction.lemmaL</code>). For a <code>CharFamily</code>, a finite list of Dirichlet characters &chi;<sub>i</sub> with positive weights a<sub>i</sub>:</p>
+  <p class="status">If for every Y<sub>0</sub> there is Y &ge; Y<sub>0</sub> with Gm(y) &le; C&middot;y<sup>&theta;</sup> for every y in [Y, Y<sup>1+&delta;</sup>], where 0 &lt; &theta; &lt; 1, then no L(s, &chi;<sub>i</sub>) vanishes for Re s &gt; &theta;.</p>
+  <p>Read the other way round, this is the card on the map: a zero to the right of &theta; would push Gm above C&middot;y<sup>&theta;</sup> somewhere in every window far enough out.</p>
+  <p>The positivity is built into the definitions. The weights of a <code>CharFamily</code> are positive. The set of points the argument has to exclude (<code>Deduction.zeroSet</code>) contains each zero together with its complex conjugate. And the record <code>Deduction.PoleData</code> requires the transform to have a simple pole at each such point, with a positive real residue at the real ones. The proof (<code>Deduction.landau_window</code>) works with the Laplace transform of Gm in the variable u = ln y and compares high derivatives of it at a real point and at points shifted along the imaginary axis; a pole to the right of &theta; makes these derivatives too large for the window bound (<code>landau_window_key</code>, <code>landau_window_contra</code>). We read this proof at the level of its statements. The classical theorem in the archive (<code>Formalism.HC.Landau.zero_free_of_Chebyshev_growth</code>), which needs the bound for all large x, is not used.</p>
+
+  <h2>The top of the proof</h2>
+  <p>Applied to the families the proof builds, the lemma gives <code>UpperTheory.FinalTheorems.everyCharacter</code>: no Dirichlet L-function has a zero with real part above 1/2, apart from the pole at s = 1. From there <code>Formalism.VW.rh_of_every</code> reaches the Riemann Hypothesis by the classical symmetry described in <a href="hypothesis.html">what the hypothesis says</a>. Why the method stops at Dirichlet L-functions is on <a href="dirichlet.html">its own page</a>.</p>
+
+  <h2>What it is built from</h2>
+  <table>
+    <tr><th>Piece</th><th>Known from</th><th>In the archive</th><th>How deep we read</th></tr>
+    <tr><td>Legendre's formula for v<sub>p</sub>(a!)</td><td>Legendre, 1808</td><td><code>SizeData₂.vonMangoldtClassSum</code></td><td>the definition</td></tr>
+    <tr><td>Orthogonality of characters</td><td>Dirichlet, 1837</td><td><code>Deduction.ch_balance</code></td><td>the statement</td></tr>
+    <tr><td>Smoothed prime sums and their main terms</td><td>the explicit formula</td><td><code>Formalism.Gz</code>, <code>Deduction.Gchi</code></td><td>the definitions</td></tr>
+    <tr><td>Square-root bound on Gm</td><td>the rest of the map</td><td><code>UpperTheory.Comparison₂.core_gm</code></td><td>the statement</td></tr>
+    <tr><td>Landau's theorem, nonnegative coefficients</td><td>Landau, 1905</td><td><code>Deduction.lemmaL</code>, <code>Deduction.zeroFree_of_rpow_window</code></td><td>the statements and the outline of the proof</td></tr>
+  </table>
+  <p>Every piece on this row is classical. The window form of Landau's lemma is what the archive proves for itself; we have not looked for it in the literature.</p>
+
+  <h2>Sources</h2>
+  <ul class="sources">
+    <li>E. Landau, &Uuml;ber einen Satz von Tschebyschef, Math. Ann. 61 (1905), 527&ndash;550. <a href="http://eudml.org/doc/158244">EuDML</a>. A modern statement: H. L. Montgomery and R. C. Vaughan, Multiplicative Number Theory I, Cambridge, 2007, section 15.1.</li>
+    <li>A.-M. Legendre, Essai sur la th&eacute;orie des nombres, 2nd edition, Paris, 1808. The formula for the power of p in a!.</li>
+    <li>The archive as published: leanprover-community/riemann-hypothesis, <a href="https://github.com/leanprover-community/riemann-hypothesis/tree/40e56bab0">commit 40e56bab0</a> ("Mirror the submission exactly as published"). Files read: <code>Formalism/StatementOC.lean</code>, <code>Formalism/LocalRingCardinality/DataParams₂.lean</code>, <code>DedekindLFunctions/LandauTheorems/ChBalance.lean</code>, <code>PrimitiveCosets/CoreGm.lean</code>, <code>DedekindLFunctions/CharFamily.lean</code>, <code>DedekindLFunctions/LandauZeroFreeCriterion.lean</code>, <code>LandauTheorems/ZeroFreeOfRpowWindow.lean</code>, <code>LandauTheorems/lemmaL.lean</code>.</li>
+    <li>ishaan2006/rh-lean-reproduction: <a href="https://github.com/ishaan2006/rh-lean-reproduction/blob/main/results/used_decls.txt.gz">the list of declarations the final theorem uses</a>, and <a href="https://github.com/ishaan2006/rh-lean-reproduction/blob/main/mechanism/TRACE.md">mechanism/TRACE.md</a>, which first traced this row.</li>
+  </ul>
+  <p class="status">The description of the zeros' contributions through the explicit formula is the standard informal picture, not a statement from the archive. The numbers in the table come from the same computation as the live check.</p>
+
+  <footer>
+    <p>Corrections are welcome: <a href="https://github.com/revenue7-eng/reading-proofs/issues">open an issue</a>.</p>
+  </footer>
+</main>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var G = 0.5772156649015329;
+  function gz(x) {
+    var c = new Uint8Array(x + 1), A = 0, B = 0, p, q, lp;
+    for (p = 2; p <= x; p++) {
+      if (c[p]) continue;
+      if (p <= x / p) for (q = p * p; q <= x; q += p) c[q] = 1;
+      lp = Math.log(p);
+      for (q = p; q <= x; q *= p) { A += lp / q; B += lp; if (q > x / p) break; }
+    }
+    return x * A - B - x * Math.log(x) + (1 + G) * x;
+  }
+  function run() {
+    var x = Math.floor(Number($('gx').value));
+    if (!(x >= 100 && x <= 10000000)) { $('gout').textContent = 'Choose x between 100 and 10 000 000.'; return; }
+    var g = gz(x), r = Math.sqrt(x);
+    $('gout').textContent = 'G(x) = ' + g.toFixed(2).replace('-', '−') + ', √x = ' + r.toFixed(1) + ', ratio ' + (g / r).toFixed(3).replace('-', '−');
+  }
+  $('gx').addEventListener('change', run);
+  $('gx').addEventListener('input', function () { clearTimeout(run.t); run.t = setTimeout(run, 300); });
+  run();
+})();
+</script>
+</body>
+</html>
