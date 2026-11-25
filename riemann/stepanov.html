@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stepanov's method: the 1969 proof the whole reading rests on</title>
+<meta name="description" content="Stepanov's elementary proof of the Riemann Hypothesis for hyperelliptic curves over a prime field, read from his 1969 paper: three classes of points, a polynomial with many cheap zeros, a degree count, and a balance. With a live count.">
+<style>
+  :root { --ink:#1d1d1b; --quiet:#5b5b57; --rule:#e3e1da; --bg:#fbfaf7; --accent:#2f5d8a; --ok:#2e7d4f; --bad:#a8552f; }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink:#ecebe6; --quiet:#a9a8a2; --rule:#3a3a37; --bg:#191918; --accent:#8fb6dc; --ok:#7fcf9d; --bad:#e09a72; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font: 18px/1.6 Georgia, "Iowan Old Style", "Times New Roman", serif; }
+  main { max-width: 680px; margin: 0 auto; padding: 64px 24px 96px; }
+  h1 { font-size: 40px; line-height:1.15; margin:0 0 16px; font-weight: 600; }
+  .lede { font-size: 21px; color: var(--quiet); margin: 0 0 32px; }
+  h2 { font: 600 15px/1.4 system-ui, sans-serif; letter-spacing:.06em; text-transform:uppercase; color:var(--quiet); margin: 44px 0 12px; padding-top: 22px; border-top: 1px solid var(--rule); }
+  p { margin: 0 0 16px; }
+  a { color: var(--accent); }
+  ul { padding-left: 22px; margin: 0 0 16px; }
+  li { margin: 0 0 8px; }
+  .status { border-left: 3px solid var(--accent); padding: 4px 0 4px 16px; }
+  .formula { font-family: "Cambria Math", "STIX Two Math", Georgia, serif; text-align: center; margin: 8px 0 18px; font-size: 19px; }
+  footer { margin-top: 64px; font: 12px/1.5 system-ui, sans-serif; color: var(--quiet); }
+  table { width:100%; border-collapse: collapse; font: 14px/1.45 system-ui, sans-serif; margin: 4px 0 12px; font-variant-numeric: tabular-nums; }
+  th, td { text-align:left; padding: 7px 8px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { color: var(--quiet); font-weight: 600; }
+  .tool { font: 15px/1.5 system-ui, sans-serif; margin: 8px 0 20px; padding: 16px; border: 1px solid var(--rule); border-radius: 8px; }
+  .row { display:flex; align-items:center; gap:12px; margin: 0 0 10px; flex-wrap: wrap; }
+  .row label { width: 190px; flex: none; color: var(--quiet); }
+  .row input[type=text], .row input[type=number] { flex: 1; min-width: 120px; font: 15px ui-monospace, monospace; padding: 6px 8px; border: 1px solid var(--rule); border-radius: 6px; background: transparent; color: var(--ink); }
+  .row input[type=range] { flex: 1; min-width: 140px; accent-color: var(--accent); }
+  .row output { min-width: 40px; text-align: right; font-variant-numeric: tabular-nums; }
+  .note { color: var(--quiet); font-size: 14px; }
+  .ok { color: var(--ok); font-weight: 600; } .bad { color: var(--bad); font-weight: 600; }
+  .sources li { font-size: 16px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Stepanov's method</h1>
+  <p class="lede">An elementary proof, from 1969, of the Riemann Hypothesis for a whole family of curves over finite fields. Our reading of the new proof for the whole numbers rests on it, so here it is on its own, read from Stepanov's paper.</p>
+  <p><a href="index.html">The architecture of a proof</a> &nbsp; <a href="map.html">The map</a> &nbsp; <a href="balance.html">The balance</a></p>
+
+  <h2>The question</h2>
+  <p>Take a prime p and do arithmetic modulo p. How many pairs (x, y) solve y² = f(x), where f is a polynomial of odd degree n? Call the number I<sub>p</sub>. Roughly half of the values f(x) are squares and each square has two roots, so one expects I<sub>p</sub> to be close to p. The analogue of the Riemann Hypothesis says how close: within a constant times √p.</p>
+  <p>For n = 3, elliptic curves, Hasse proved |I<sub>p</sub> − p| ≤ 2√p in the 1930s, with the theory of complex multiplication; Manin later gave an elementary proof of that case. For every curve the bound follows from Weil's work of the 1940s, which uses deep algebraic geometry. In 1969 Sergei Stepanov proved, with nothing but polynomials, that for every odd n ≥ 3 and every prime p &gt; 9n²</p>
+  <p class="formula">|I<sub>p</sub> − p| ≤ √(3n) · n · √p</p>
+  <p>The constant is worse than Weil's, as Stepanov says himself; the order √p is the same. The point was the method.</p>
+
+  <h2>Sorting the points</h2>
+  <p>Stepanov splits the numbers modulo p into three classes: those x where f(x) is a nonzero square (there are I<sub>1</sub> of them), those where it is not a square (I<sub>−1</sub>), and the roots of f (I<sub>0</sub>). Each x of the first class gives two solutions, each root gives one, so</p>
+  <p class="formula">I<sub>p</sub> = 2 I<sub>1</sub> + I<sub>0</sub>, &nbsp;&nbsp; I<sub>1</sub> + I<sub>−1</sub> + I<sub>0</sub> = p</p>
+  <p>Two plain facts about arithmetic modulo p do all the work. By Euler's criterion, f(x)<sup>(p−1)/2</sup> equals 1 on the first class and −1 on the second. And every number modulo p satisfies x<sup>p</sup> − x = 0. The second fact is the Frobenius: raising to the power p moves nothing.</p>
+
+  <h2>Move one: many zeros, cheaply</h2>
+  <p>To bound I<sub>−1</sub>, Stepanov builds a polynomial of the form</p>
+  <p class="formula">R(x) = (1 + f<sup>(p−1)/2</sup>) · Σ<sub>j</sub> r<sub>j</sub>(x) (x<sup>p</sup> − x)<sup>j−1</sup> + Σ<sub>j</sub> t<sub>j</sub>(x) (x<sup>p</sup> − x)<sup>j</sup></p>
+  <p>with unknown polynomials r<sub>j</sub>, t<sub>j</sub> of low degree, for j = 1, …, m. At every non-square point the first factor is 0, and at every point at all x<sup>p</sup> − x is 0, so R vanishes at each of the I<sub>−1</sub> points.</p>
+  <p>The trick is to make it vanish many times. A zero of order 2m means that R and its first 2m − 1 derivatives all vanish. Modulo p the derivative of x<sup>p</sup> is p·x<sup>p−1</sup> = 0, so differentiating does not break the pattern: each derivative can be kept in the same shape, with new coefficient polynomials, and the conditions for that are linear equations in the unknown coefficients. There are more unknowns than equations, so a solution exists. The Frobenius has made high multiplicity cheap.</p>
+  <p>Modern accounts do the same with Hasse derivatives, which see x<sup>p</sup> as a constant up to order p; Stepanov uses ordinary derivatives, which is enough because 2m stays below p.</p>
+
+  <h2>Move two: not zero, and the prohibition</h2>
+  <p>A solution of linear equations could be the zero polynomial, and then everything is empty. Stepanov rules this out by degrees. The terms of R have degrees that differ in parity, because n is odd, so they cannot cancel. This is why his theorem asks for odd n. Showing that the auxiliary object is not zero is a separate and delicate step in every version of the method.</p>
+  <p>Then the prohibition: a nonzero polynomial has no more roots, counted with multiplicity, than its degree. Each of the I<sub>−1</sub> points is a root of multiplicity 2m, and Stepanov's degree count gives</p>
+  <p class="formula">2m · I<sub>−1</sub> ≤ D(m) = (p − 1)n/2 + (m − 1)p + (n − 1)m² + n</p>
+  <p>A second polynomial, with 1 − f<sup>(p−1)/2</sup> in front, gives the same bound for I<sub>1</sub>.</p>
+
+  <h2>Move three: the balance</h2>
+  <p>Divide by 2m. The bound on each class is p/2 plus two pieces that pull against each other: one of size about p/m that shrinks as m grows, one of size about (n − 1)m that grows with m. Stepanov takes m = [√(p/3n)], the largest his lemma allows, and both pieces are then of order √p. Since I<sub>1</sub> + I<sub>−1</sub> is nearly p, an upper bound on one class is a lower bound on the other, and the two together give |I<sub>p</sub> − p| ≤ √(3n)·n·√p. The square root comes from the balance.</p>
+
+  <h2>Count it yourself</h2>
+  <p>Choose a prime and a monic polynomial of odd degree. The page counts the three classes exactly, then compares I<sub>p</sub> with Weil's bound 2g√p (here g = (n − 1)/2) and with Stepanov's, and checks the lemma bound D(m)/(2m) for both classes at the m you pick.</p>
+  <div class="tool">
+    <div class="row"><label for="pIn">prime p</label><input id="pIn" type="number" min="3" max="300007" value="1009"></div>
+    <div class="row"><label for="fIn">f, coefficients from x<sup>n</sup> down</label><input id="fIn" type="text" value="1 0 1 1"></div>
+    <div class="note" id="fShow"></div>
+    <div class="row"><label for="mIn">m</label><input id="mIn" type="range" min="1" max="10" step="1" value="10"><output id="mOut"></output></div>
+    <table id="tab"></table>
+    <div id="verdict"></div>
+  </div>
+  <p class="note">The default is y² = x³ + x + 1, the curve from our article. I<sub>p</sub> counts the solutions (x, y) with both coordinates modulo p, as in Stepanov's paper.</p>
+
+  <h2>Where the idea came from, and where it went</h2>
+  <p>The core of the method, that a nonzero polynomial of low degree cannot have many zeros of high order, was pioneered by Thue. Stepanov applied it to hyperelliptic curves; W. M. Schmidt and E. Bombieri soon extended the approach to all curves, and in Bombieri's form it needs only the Riemann–Roch theorem. Variants of the method have since been used well beyond curves, for example by Bourgain, Gamburd and Sarnak on the Markoff equation.</p>
+  <p>The proof of the full Riemann Hypothesis that this site reads follows the same three moves over the whole numbers, where there is no single Frobenius to make zeros cheap. How each move is replaced is on the <a href="map.html">map</a>; the replacement for the Frobenius is <a href="frobenius.html">a Frobenius at every inert prime</a>, and the one for multiplicity is <a href="ladder.html">the ladder of lifts</a>.</p>
+
+  <h2>Sources</h2>
+  <ul class="sources">
+    <li>S. A. Stepanov, On the number of points of a hyperelliptic curve over a finite prime field, Izv. Akad. Nauk SSSR Ser. Mat. 33:5 (1969), 1171–1181; English translation in Math. USSR-Izv. 3:5 (1969), 1103–1114. <a href="https://www.mathnet.ru/eng/im2197">Math-Net.Ru</a>. The theorem, the three classes, the polynomial, the degree count and the choice of m on this page are taken from it.</li>
+    <li>B. Hanson, Stepanov's method for hyperelliptic curves. <a href="https://personal.science.psu.edu/rcv4/stepanovs-method-hyperelliptic.pdf">PDF</a>. Hasse derivatives, the non-vanishing lemma, the attribution to Thue.</li>
+    <li>A. Milojević, The Riemann Hypothesis for curves over finite fields, senior thesis, Princeton, 2023. <a href="https://aleksa-milojevic.github.io/expository/thesis.pdf">PDF</a>. History: Hasse's use of complex multiplication, Schmidt and Bombieri, later uses of the method.</li>
+    <li>J. S. Milne, The Riemann Hypothesis over finite fields: from Weil to the present day. <a href="https://arxiv.org/abs/1509.00797">arXiv:1509.00797</a>. Bombieri's completion of the approach.</li>
+  </ul>
+  <p class="status">This page is our reading of these sources. Stepanov's own equations for the derivatives fill several pages; we describe their purpose, not every step.</p>
+
+  <footer>
+    <p>Corrections are welcome: <a href="https://github.com/revenue7-eng/reading-proofs/issues">open an issue</a>.</p>
+  </footer>
+</main>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  function isPrime(n) { if (n < 2 || n % 1) return false; for (var d = 2; d * d <= n; d++) if (n % d === 0) return false; return true; }
+  function powmod(b, e, m) { var r = 1n, B = BigInt(b) % BigInt(m), M = BigInt(m), E = BigInt(e); while (E > 0n) { if (E & 1n) r = r * B % M; B = B * B % M; E >>= 1n; } return Number(r); }
+  function parse() {
+    var co = $('fIn').value.trim().split(/[\s,]+/).filter(function (t) { return /^-?\d+$/.test(t); }).map(Number);
+    return co;
+  }
+  function fmtPoly(co) {
+    var n = co.length - 1, parts = [];
+    co.forEach(function (c, i) {
+      var k = n - i; if (c === 0) return;
+      var a = Math.abs(c), s = c < 0 ? '− ' : (parts.length ? '+ ' : '');
+      var mon = k === 0 ? String(a) : (a === 1 ? '' : a) + 'x' + (k > 1 ? '^' + k : '');
+      parts.push(s + mon);
+    });
+    return 'y² = ' + (parts.join(' ') || '0');
+  }
+  var lastKey = '', cache = null;
+  function run() {
+    var p = Math.round(+$('pIn').value), co = parse(), n = co.length - 1;
+    var tab = $('tab'), v = $('verdict'); tab.innerHTML = ''; v.textContent = ''; v.className = '';
+    if (!isPrime(p) || p > 300007) { v.className = 'bad'; v.textContent = 'Enter a prime up to 300,007.'; return; }
+    if (n < 3 || n % 2 === 0 || co[0] !== 1) { v.className = 'bad'; v.textContent = 'f must be monic of odd degree at least 3, for example 1 0 1 1.'; return; }
+    $('fShow').textContent = fmtPoly(co) + ' over the integers mod ' + p + ', degree n = ' + n;
+    var key = p + '|' + co.join(',');
+    if (key !== lastKey) {
+      var I1 = 0, Im = 0, I0 = 0, e = (p - 1) / 2;
+      for (var x = 0; x < p; x++) {
+        var val = 0;
+        for (var i = 0; i < co.length; i++) val = (val * x + ((co[i] % p) + p)) % p;
+        if (val === 0) I0++; else if (powmod(val, e, p) === 1) I1++; else Im++;
+      }
+      cache = {I1: I1, Im: Im, I0: I0}; lastKey = key;
+    }
+    var I1 = cache.I1, Im = cache.Im, I0 = cache.I0, Ip = 2 * I1 + I0;
+    var mMax = Math.max(1, Math.floor(Math.sqrt(p / (3 * n))));
+    var mIn = $('mIn'); mIn.max = mMax; if (+mIn.value > mMax || key !== mIn.dataset.key) { mIn.value = mMax; mIn.dataset.key = key; }
+    var m = +mIn.value; $('mOut').textContent = m;
+    var D = (p - 1) * n / 2 + (m - 1) * p + (n - 1) * m * m + n, bound = D / (2 * m);
+    var g = (n - 1) / 2, weil = 2 * g * Math.sqrt(p), step = Math.sqrt(3 * n) * n * Math.sqrt(p);
+    function row(a, b) { var tr = document.createElement('tr'); [a, b].forEach(function (t, k) { var c = document.createElement(k ? 'td' : 'td'); c.textContent = t; tr.appendChild(c); }); tab.appendChild(tr); }
+    var h = document.createElement('tr'); ['', 'value'].forEach(function (t) { var c = document.createElement('th'); c.textContent = t; h.appendChild(c); }); tab.appendChild(h);
+    row('I₁: f(x) a nonzero square', I1.toLocaleString('en'));
+    row('I₋₁: f(x) not a square', Im.toLocaleString('en'));
+    row('I₀: roots of f', I0);
+    row('I_p = 2 I₁ + I₀, the number of solutions', Ip.toLocaleString('en'));
+    row('|I_p − p|', Math.abs(Ip - p).toLocaleString('en'));
+    row('Weil: 2g√p', weil.toFixed(1));
+    row('Stepanov: √(3n)·n·√p', step.toFixed(1));
+    row('lemma bound D(m)/(2m) for I₁ and for I₋₁', bound.toFixed(1));
+    var ok = I1 <= bound && Im <= bound && Math.abs(Ip - p) <= weil + 1e-9;
+    var hyp = p > 9 * n * n;
+    v.className = ok ? 'ok' : 'bad';
+    v.textContent = (ok ? 'Both classes are below the lemma bound, and I_p is inside Weil\'s corridor.' : 'A bound fails here (this should not happen within the hypotheses).')
+      + (hyp ? '' : ' Note: p ≤ 9n², so Stepanov\'s hypothesis p > 9n² does not hold for this p.');
+  }
+  ['pIn', 'fIn', 'mIn'].forEach(function (id) { $(id).addEventListener('input', run); });
+  run();
+})();
+</script>
+</body>
+</html>
