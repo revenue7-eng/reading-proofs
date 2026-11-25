@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The right size: why the period, and not the factorial</title>
+<meta name="description" content="One part of the proof of the Riemann Hypothesis, as we read it: how the size of the objects is measured, and why a period with complex multiplication carries exactly the constants of the prime count. With a live check for the lemniscate.">
+<style>
+  :root { --ink:#1d1d1b; --quiet:#5b5b57; --rule:#e3e1da; --bg:#fbfaf7; --accent:#2f5d8a; --pink:#f9d9df; --ok:#2e7d4f; }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink:#ecebe6; --quiet:#a9a8a2; --rule:#3a3a37; --bg:#191918; --accent:#8fb6dc; --pink:#4a2f35; --ok:#7fcf9d; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font: 18px/1.6 Georgia, "Iowan Old Style", "Times New Roman", serif; }
+  main { max-width: 680px; margin: 0 auto; padding: 64px 24px 96px; }
+  h1 { font-size: 40px; line-height:1.15; margin:0 0 16px; font-weight: 600; }
+  .lede { font-size: 21px; color: var(--quiet); margin: 0 0 32px; }
+  h2 { font: 600 15px/1.4 system-ui, sans-serif; letter-spacing:.06em; text-transform:uppercase; color:var(--quiet); margin: 44px 0 12px; padding-top: 22px; border-top: 1px solid var(--rule); }
+  p { margin: 0 0 16px; }
+  a { color: var(--accent); }
+  .status { border-left: 3px solid var(--accent); padding: 4px 0 4px 16px; }
+  .formula { font-family: "Cambria Math", "STIX Two Math", Georgia, serif; text-align: center; margin: 8px 0 18px; font-size: 19px; }
+  footer { margin-top: 64px; font: 12px/1.5 system-ui, sans-serif; color: var(--quiet); }
+  table { width:100%; border-collapse: collapse; font: 14px/1.45 system-ui, sans-serif; margin: 4px 0 16px; font-variant-numeric: tabular-nums; }
+  th, td { text-align:left; padding: 7px 8px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { color: var(--quiet); font-weight: 600; }
+  code { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .tool { font: 15px/1.5 system-ui, sans-serif; margin: 8px 0 20px; padding: 16px; border: 1px solid var(--rule); border-radius: 8px; }
+  .row { display:flex; align-items:center; gap:12px; margin: 0 0 10px; flex-wrap: wrap; }
+  .row label { width: 200px; flex: none; color: var(--quiet); }
+  .row input[type=range] { flex: 1; min-width: 140px; accent-color: var(--accent); }
+  .row output { min-width: 80px; text-align: right; font-variant-numeric: tabular-nums; }
+  .num { font: 14px ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .verdict { font-weight: 600; margin-top: 8px; color: var(--ok); }
+</style>
+</head>
+<body>
+<main>
+  <h1>The right size</h1>
+  <p class="lede">Divisibility only bounds something if the size of the object is known independently and exactly. Here is how the proof measures it.</p>
+  <p><a href="./">The architecture of a proof</a> &nbsp; <a href="map.html">The map</a> &nbsp; <a href="frobenius.html">A Frobenius at every inert prime</a></p>
+
+  <h2>Why the factorial is not enough</h2>
+  <p>The proof runs like Chebyshev's argument with a better whole number. An object divisible by many primes, many times, cannot be small. Comparing its divisibility with its size bounds the error in the prime count.</p>
+  <p>For that comparison to say anything, the size must be known by a different route from the divisibility, and it must carry the same constants as the prime count: Euler's constant γ and the number L′/L(1, χ<sub>K</sub>) from the field. The factorial fails on both counts. Its size and its divisibility are given by the same formula of Legendre, and it misses the term γ·a. We checked this by computer while reading.</p>
+
+  <h2>How the proof measures size</h2>
+  <p>The objects of the proof live in whole-number lattices of polynomials, the Fock model of the Weil representation. A monomial of degree A there has norm</p>
+  <p class="formula">A! · Ω<sup>A</sup></p>
+  <p>where Ω is a period of the field with complex multiplication. The factorial is still there, but it now comes with Ω<sup>A</sup>, and that factor brings the missing constants. Taking logarithms, the term A·ln Ω is linear in A, exactly where the factorial fell short.</p>
+
+  <h2>What the period knows</h2>
+  <p>A classical theorem of Chowla and Selberg says that a period with complex multiplication is a product of values of the Gamma function. Gamma knows Euler's constant: its logarithmic derivative at 1 is −γ. Through the functional equation of L(s, χ<sub>K</sub>), ln Ω turns into a combination of γ and L′/L(1, χ<sub>K</sub>). In the archive this is proved from Kronecker's limit formula.</p>
+  <p>For the simplest case, the field Q(i) and Gauss's lemniscate, the identity reads</p>
+  <p class="formula">ln Ω = ½ (γ − L′/L(1, χ)) + ln π − ½ ln 2</p>
+  <p>where χ is the character mod 4 and Ω = 2.622… is the lemniscate constant. We worked out this form ourselves from Lerch's formula and the functional equation, as an illustration; the proof uses a larger field, and its formula has the same shape. The check below computes Ω three independent ways.</p>
+
+  <div class="tool">
+    <div class="row"><label for="nIn">terms of the L-series</label><input id="nIn" type="range" min="2" max="7" step="0.25" value="5"><output id="nOut"></output></div>
+    <table id="tab"></table>
+    <div class="verdict" id="verdict"></div>
+  </div>
+  <p>The first line is Gauss's arithmetic–geometric mean, the second Chowla–Selberg, the third the prime-count constants: γ, and L′/L(1, χ) summed term by term as −Σ χ(n) ln n / n divided by π/4. Push the slider and the third line closes in on the other two. γ itself is entered as a known constant.</p>
+
+  <h2>Size and divisibility agree</h2>
+  <p>With the period in place, ln(A! · Ω<sup>A</sup>) reproduces the main term of the prime count, constants included, and agrees with the divisibility through the term linear in A. What is left over is the error, and that is what the rest of the proof bounds.</p>
+  <p>The same field that supplies the period also supplies <a href="frobenius.html">the local Frobenius</a> and sorts the primes. That is why the constants match: they are not fitted, they come from one object.</p>
+
+  <h2>What it is built from</h2>
+  <table>
+    <tr><th>Piece</th><th>Known from</th><th>In the archive</th><th>How deep we read</th></tr>
+    <tr><td>Kronecker's limit formula</td><td>Kronecker</td><td><code>KroneckerLimit</code></td><td>the statement</td></tr>
+    <tr><td>Chowla–Selberg: the CM period</td><td>Chowla, Selberg, 1967</td><td><code>chowla_selberg_eta</code></td><td>to the published source</td></tr>
+    <tr><td>Size benchmark ln(A! · Ω<sup>A</sup>)</td><td>Stirling plus the period</td><td><code>kerPlace</code></td><td>to the published source</td></tr>
+    <tr><td>Mass formula for CM</td><td>Siegel: volumes and masses</td><td><code>SiegelMassRatioCM</code></td><td>the statement</td></tr>
+  </table>
+  <p>Every piece here is classical, and the archive proves the period formula itself rather than quoting it. What matters is the choice of object whose size carries the right constants.</p>
+
+  <h2>What we have and have not read</h2>
+  <p class="status">This page is our reading of the formal proof, not the author's account. The identity for Q(i) is our own illustration, derived from classical formulas; the archive works with a larger field. The mass formula we read only as a statement.</p>
+
+  <footer>
+    <p>Corrections are welcome: <a href="https://github.com/revenue7-eng/reading-proofs/issues">open an issue</a>.</p>
+  </footer>
+</main>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var EULER = 0.5772156649015329;
+
+  function agm(a, b) {
+    for (var i = 0; i < 40; i++) { var m = (a + b) / 2; b = Math.sqrt(a * b); a = m; }
+    return a;
+  }
+  function gamma(z) {
+    // shift up, then Stirling's series for ln Gamma; accurate to about 15 digits for z > 0
+    var shift = 1;
+    while (z < 12) { shift *= z; z += 1; }
+    var z2 = z * z;
+    var lg = (z - 0.5) * Math.log(z) - z + 0.5 * Math.log(2 * Math.PI)
+      + 1 / (12 * z) - 1 / (360 * z * z2) + 1 / (1260 * z2 * z2 * z) - 1 / (1680 * z2 * z2 * z2 * z);
+    return Math.exp(lg) / shift;
+  }
+  function lprime(N) {
+    // L'(1, chi) = - sum_{k>=0} (-1)^k ln(2k+1)/(2k+1); average the last two partial sums
+    var s = 0, prev = 0;
+    for (var k = 0; k < N; k++) {
+      prev = s;
+      var n = 2 * k + 1;
+      s += (k % 2 ? 1 : -1) * Math.log(n) / n;
+    }
+    return (s + prev) / 2;
+  }
+  function row(t, cells, head) {
+    var tr = document.createElement('tr');
+    cells.forEach(function (c) {
+      var d = document.createElement(head ? 'th' : 'td');
+      d.textContent = c; if (!head && cells.indexOf(c) === 1) d.className = 'num';
+      tr.appendChild(d);
+    });
+    t.appendChild(tr);
+  }
+  function agreeDigits(a, b) {
+    var d = Math.abs(a - b) / Math.abs(b);
+    return d === 0 ? 15 : Math.max(0, Math.floor(-Math.log10(d)));
+  }
+  function run() {
+    var N = Math.round(Math.pow(10, +$('nIn').value));
+    $('nOut').textContent = N.toLocaleString('en');
+    var o1 = Math.PI / agm(1, Math.SQRT2);
+    var g = gamma(0.25);
+    var o2 = g * g / (2 * Math.sqrt(2 * Math.PI));
+    var r = lprime(N) / (Math.PI / 4);
+    var o3 = Math.exp((EULER - r) / 2 + Math.log(Math.PI) - 0.5 * Math.log(2));
+    var t = $('tab'); t.innerHTML = '';
+    row(t, ['Route', 'Ω', 'agrees with the first'], true);
+    row(t, ['π / AGM(1, √2)', o1.toFixed(12), '']);
+    row(t, ['Γ(1/4)² / (2√(2π))', o2.toFixed(12), agreeDigits(o2, o1) + ' digits']);
+    row(t, ['from γ and L′/L(1, χ)', o3.toFixed(12), agreeDigits(o3, o1) + ' digits']);
+    $('verdict').textContent = 'L′/L(1, χ) ≈ ' + r.toFixed(10) + ' from ' + N.toLocaleString('en') + ' terms.';
+  }
+  $('nIn').addEventListener('input', run);
+  run();
+})();
+</script>
+</body>
+</html>
