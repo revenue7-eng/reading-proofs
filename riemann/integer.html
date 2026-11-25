@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One integer for every l: how the proof closes its hardest case</title>
+<meta name="description" content="One part of the proof of the Riemann Hypothesis, as we read it: the cost of gluing local divisibility into a global statement, and the single nonzero whole number that bounds it.">
+<style>
+  :root { --ink:#1d1d1b; --quiet:#5b5b57; --rule:#e3e1da; --bg:#fbfaf7; --accent:#2f5d8a; --pink:#f9d9df; }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink:#ecebe6; --quiet:#a9a8a2; --rule:#3a3a37; --bg:#191918; --accent:#8fb6dc; --pink:#4a2f35; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font: 18px/1.6 Georgia, "Iowan Old Style", "Times New Roman", serif; }
+  main { max-width: 680px; margin: 0 auto; padding: 64px 24px 96px; }
+  h1 { font-size: 40px; line-height:1.15; margin:0 0 16px; font-weight: 600; }
+  .lede { font-size: 21px; color: var(--quiet); margin: 0 0 32px; }
+  h2 { font: 600 15px/1.4 system-ui, sans-serif; letter-spacing:.06em; text-transform:uppercase; color:var(--quiet); margin: 44px 0 12px; padding-top: 22px; border-top: 1px solid var(--rule); }
+  p { margin: 0 0 16px; }
+  a { color: var(--accent); }
+  ol, ul { padding-left: 22px; margin: 0 0 16px; }
+  li { margin: 0 0 8px; }
+  .status { border-left: 3px solid var(--accent); padding: 4px 0 4px 16px; }
+  footer { margin-top: 64px; font: 12px/1.5 system-ui, sans-serif; color: var(--quiet); }
+  table.bricks { width:100%; border-collapse: collapse; font: 14px/1.45 system-ui, sans-serif; margin: 4px 0 16px; }
+  table.bricks th, table.bricks td { text-align:left; padding: 8px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  table.bricks th { color: var(--quiet); font-weight: 600; }
+  table.bricks tr.own td { background: var(--pink); }
+  code { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; }
+</style>
+</head>
+<body>
+<main>
+  <h1>One integer for every l</h1>
+  <p class="lede">The price of turning divisibility at each prime into one global statement, and the single whole number that pays it in the hardest case.</p>
+  <p><a href="./">The architecture of a proof</a> &nbsp; <a href="map.html">The map</a> &nbsp; <a href="ladder.html">The ladder of lifts</a></p>
+
+  <h2>Why there is a price at all</h2>
+  <p>The <a href="ladder.html">ladder of lifts</a> collects its gain one prime at a time. But the conclusion has to hold for one global object, a lattice of whole-number objects that is the same for every prime at once. Facts that are true at each prime separately do not always glue into a fact about the whole.</p>
+  <p>Number theory has a precise measure of how badly gluing can fail: Selmer groups. They record what is true "locally everywhere" but not "globally". In the proof, the denominators that appear on each rung are bounded by the total length of such groups.</p>
+  <p>This is not bookkeeping. If the price of a rung grew with the length of the ladder, the total cost would be m² instead of m, the balance would land at x<sup>1/3</sup>, and the argument would only show that there are no zeros to the right of 2/3 (see <a href="balance.html">the balance</a>). We first filed this part under supporting work; Rubinstein's guide made us see that it belongs to the idea.</p>
+
+  <h2>How the bound is made</h2>
+  <p>The total length of the Selmer groups is bounded by sorting the primes l into cases. As we read it:</p>
+  <ul>
+    <li><strong>All cases but one involve only finitely many primes.</strong> The tools that this part of the archive uses are standard: Poitou–Tate duality, the theorem of Ferrero and Washington, and the vanishing of Selmer groups for modular forms. For that vanishing the archive builds its own Euler system of the kind introduced by Kato, rather than quoting it.</li>
+    <li><strong>One case involves infinitely many primes.</strong> This is the hard one, and it is closed by a single whole number.</li>
+  </ul>
+
+  <h2>The integer</h2>
+  <p>The number is a product of differences. On one side stand the traces of Frobenius of certain three-dimensional Galois representations attached to the construction. On the other stands the trace that an Eisenstein series would have. Multiply all the differences together and call the result NN.</p>
+  <p>Why it helps, as we read it. If a prime l causes trouble in the hard case, a congruence argument in the style of Ribet makes one of the traces agree with the Eisenstein trace modulo l, so l divides NN. Every troublesome l then divides one fixed integer, and their total contribution is bounded by ln NN. One integer covers every l at once: Ribet's scheme of congruences, made effective.</p>
+  <p>Why it is not zero. Everything rests on NN being nonzero, because a nonzero whole number has absolute value at least 1, and then its logarithm bounds what it must. The archive gets this from a comparison of sizes: the traces lie in the window allowed by Jacquet and Shalika, which is enough to keep them away from the Eisenstein trace. The much stronger Ramanujan bound is not used.</p>
+  <p>The same plain fact, a nonzero whole number is at least 1, also drives the count of divisibility at the start of the proof and Bost's inequality in the middle. We note this as an observation, not as a claim about the proof.</p>
+
+  <h2>What it is built from</h2>
+  <table class="bricks">
+    <tr><th>Piece</th><th>Known from</th><th>In the archive</th><th>How deep we read</th></tr>
+    <tr><td>Poitou–Tate duality</td><td>Poitou, Tate</td><td></td><td>the statement</td></tr>
+    <tr><td>Vanishing of Selmer groups</td><td>Kato's Euler system, built inside the archive</td><td><code>KatoTwoW</code></td><td>to the published source</td></tr>
+    <tr><td>Ferrero–Washington</td><td>1979</td><td><code>ferreroWashington</code></td><td>the statement</td></tr>
+    <tr><td>The Jacquet–Shalika window, not purity</td><td>Jacquet, Shalika, 1981</td><td><code>jacquetShalikaBound</code></td><td>to the published source</td></tr>
+    <tr><td>Congruences with Eisenstein series</td><td>Ribet's scheme</td><td></td><td>by type, our identification</td></tr>
+    <tr class="own"><td>One integer NN for all l</td><td>the author's own, as we read it</td><td><code>…_norm_nonzero_log_bound</code></td><td>to the published source</td></tr>
+  </table>
+  <p>Every piece but the last is known in kind. What we take to be the author's own is the idea of closing an infinite family of primes with one product, and of proving it nonzero by comparing sizes rather than by a deep purity theorem.</p>
+
+  <h2>What we have and have not read</h2>
+  <p class="status">This page is our reading of the formal proof, not the author's account. Of the six cases of the Selmer bound, we did not read two, and we did not read inside the construction of Kato's zeta classes. We do not expect the idea to hide there, but we have not checked. The link between Ribet's congruences and the archive is our identification by type, not a name the archive uses.</p>
+
+  <footer>
+    <p>Corrections are welcome: <a href="https://github.com/revenue7-eng/reading-proofs/issues">open an issue</a>.</p>
+  </footer>
+</main>
+</body>
+</html>
