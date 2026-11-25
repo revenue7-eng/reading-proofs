@@ -52,20 +52,27 @@
   .link { cursor:pointer; }
   .shape.link:hover rect, .sect.link:hover rect { stroke:var(--line); stroke-width:2.4; }
   foreignObject.link:hover .tbl table, foreignObject.link:hover .txt { outline:2px solid var(--line); outline-offset:4px; }
+  .lk { font:600 13px system-ui, sans-serif; fill:var(--quiet); pointer-events:none; }
+  .sect text tspan.lk { font-size:15px; }
+  .lkh { color:var(--quiet); font:600 0.8em system-ui, sans-serif; margin-left:6px; }
+  #tip { position:fixed; z-index:10; pointer-events:none; display:none; max-width:300px; padding:6px 10px; border-radius:6px; background:var(--card); color:var(--ink); border:1px solid var(--card-edge); box-shadow:0 2px 8px rgba(0,0,0,.15); font:13px/1.35 system-ui, sans-serif; }
 </style>
 </head>
 <body>
 <div class="bar">
   <a href="index.html">&larr; The architecture of a proof</a>
-  <span class="st">Our reading of a formal proof announced on 20 November 2026, not peer reviewed. Drag to move, scroll to zoom, click a card to open its page.</span>
+  <span class="st">Our reading of a formal proof announced on 20 November 2026, not peer reviewed. Drag to move, scroll to zoom; anything marked ↗ opens its page.</span>
   <button id="zin" title="Zoom in">+</button><button id="zout" title="Zoom out">&minus;</button><button id="zfit" class="w" title="Fit the whole map">Fit</button>
 </div>
+<div id="tip"></div>
 <svg id="map" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Map of what the proof is built from"></svg>
 <script>
 const EL = __BOARD__;
 const NS = 'http://www.w3.org/2000/svg', XH = 'http://www.w3.org/1999/xhtml';
 const svg = document.getElementById('map');
 const byId = Object.fromEntries(EL.map(e => [e.id, e]));
+const PAGES = {'size.html':'The right size','frobenius.html':'A Frobenius at every inert prime','ladder.html':'The ladder of lifts','prohibition.html':'The prohibition','degenerate.html':'Few bad members','integrality.html':'Whole numbers on every rung','integer.html':'One integer for every l','family.html':'The family exists','balance.html':'The balance','stepanov.html':"Stepanov's method",'compare.html':'Stepanov and the new proof, side by side'};
+function tipText(h) { const [f, a] = h.split('#'); const name = PAGES[f] || f; return '\u2192 ' + name + (a ? (a.startsWith('b-') ? ' \u00b7 its row' : ' \u00b7 its section') : ''); }
 function s(tag, attrs, parent) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); (parent || root).appendChild(e); return e; }
 function inline(parent, line) {
   const re = /(\*\*[^*]+\*\*|`[^`]+`)/g; let last = 0, m;
@@ -96,6 +103,7 @@ for (const e of EL) {
     if (e.href) g.setAttribute('data-href', e.href);
     const rc = s('rect', {x:e.x, y:e.y, width:e.w, height:e.h, rx:12}, g);
     const t = s('text', {x:e.x + 4, y:e.y - 10}, g); t.textContent = e.text;
+    if (e.href) { const m = document.createElementNS(NS, 'tspan'); m.setAttribute('class', 'lk'); m.textContent = ' \u2197'; t.appendChild(m); }
     box[e.id] = {x:e.x, y:e.y, w:e.w, h:e.h, sect:true, rect:rc};
   } else if (e.type === 'shape') {
     const g = s('g', {class:'shape' + (e.color === 'pink' ? ' pink' : '') + (e.stroke ? ' s-' + e.stroke : '') + (e.href ? ' link' : '')}, gTop);
@@ -104,11 +112,14 @@ for (const e of EL) {
     const [fo, d] = html(g, e.x, e.y, e.w, e.h, 'fo sz-' + (e.size || 'body') + (e.textAlign === 'left' ? ' left' : ''));
     d.style.height = 'auto'; d.style.minHeight = '100%';
     for (const line of e.text.split('\n')) { const p = document.createElementNS(XH, 'p'); inline(p, line); d.appendChild(p); }
-    box[e.id] = {x:e.x, y:e.y, w:e.w, h:e.h, shape:true, g, rect:g.firstChild, fo, d};
+    const mark = e.href ? s('text', {x:e.x + e.w - 7, y:e.y + 15, 'text-anchor':'end', class:'lk'}, g) : null;
+    if (mark) mark.textContent = '\u2197';
+    box[e.id] = {x:e.x, y:e.y, w:e.w, h:e.h, shape:true, g, rect:g.firstChild, fo, d, mark};
   } else if (e.type === 'text') {
     const w = e.wrap || 2000;
     const [fo, d] = html(gTop, e.x, e.y, w, 600, 'txt sz-' + (e.size || 'body'));
     for (const line of e.text.split('\n')) { const p = document.createElementNS(XH, 'p'); p.style.margin = '0'; inline(p, line); d.appendChild(p); }
+    if (e.href) { const m = document.createElementNS(XH, 'span'); m.className = 'lkh'; m.textContent = '\u2197'; d.firstChild.appendChild(m); }
     if (e.href) { fo.setAttribute('data-href', e.href); fo.setAttribute('class', 'link'); }
     box[e.id] = {x:e.x, y:e.y, w, h:0, fo, d};
   } else if (e.type === 'table') {
@@ -120,13 +131,14 @@ for (const e of EL) {
       r.forEach((c, j) => { const td = document.createElementNS(XH, 'td'); td.style.width = e.cols[j] + 'px'; td.textContent = c; if ((e.pink || []).some(([a, b]) => a === i && b === j)) td.className = 'pink'; tr.appendChild(td); });
       t.appendChild(tr);
     });
+    if (e.href) { const m = document.createElementNS(XH, 'span'); m.className = 'lkh'; m.textContent = '\u2197'; t.rows[0].cells[t.rows[0].cells.length - 1].appendChild(m); }
     d.appendChild(t);
     if (e.href) { fo.setAttribute('data-href', e.href); fo.setAttribute('class', 'link'); }
     box[e.id] = {x:e.x, y:e.y, w, h:0, fo, d, tbl:t};
   }
 }
 
-function setY(b, y, h) { b.y = y; b.h = h; b.rect.setAttribute('y', y); b.rect.setAttribute('height', h); b.fo.setAttribute('y', y); b.fo.setAttribute('height', h); }
+function setY(b, y, h) { b.y = y; b.h = h; b.rect.setAttribute('y', y); b.rect.setAttribute('height', h); b.fo.setAttribute('y', y); b.fo.setAttribute('height', h); if (b.mark) b.mark.setAttribute('y', y + 15); }
 function settle() {
   for (const id in box) {
     const b = box[id];
@@ -198,6 +210,17 @@ svg.addEventListener('pointerup', ev => {
   const a = hit && hit.closest('[data-href]');
   if (a) window.location.href = a.getAttribute('data-href');
 });
+const tip = document.getElementById('tip');
+svg.addEventListener('pointermove', ev => {
+  if (drag || ev.pointerType === 'touch') { tip.style.display = 'none'; return; }
+  const a = ev.target.closest && ev.target.closest('[data-href]');
+  if (!a) { tip.style.display = 'none'; return; }
+  tip.textContent = tipText(a.getAttribute('data-href'));
+  tip.style.display = 'block';
+  const x = Math.min(ev.clientX + 14, window.innerWidth - tip.offsetWidth - 8);
+  tip.style.left = x + 'px'; tip.style.top = (ev.clientY + 16) + 'px';
+});
+svg.addEventListener('pointerleave', () => { tip.style.display = 'none'; });
 document.getElementById('zin').onclick = () => zoom(0.8);
 document.getElementById('zout').onclick = () => zoom(1.25);
 document.getElementById('zfit').onclick = fit;
