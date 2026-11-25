@@ -37,7 +37,7 @@
   <p>On 20 November 2026 Levent Alpöge announced, in a four-page note, that he and Claude had proved the Riemann Hypothesis and its generalization to all Dirichlet L-functions. The proof exists only as an archive of Lean code: about 175,000 files and 1.5 million declarations by our count. There is no human-readable version of the argument.</p>
   <p>We wrote up what we understood as an article: <a href="https://www.linkedin.com/pulse/how-we-understood-proof-riemann-hypothesis-andrey-lazarev-2v87c/">How we understood the proof of the Riemann Hypothesis</a>.</p>
   <p>We read the archive's source, layer by layer, to understand the proof. This site is our reading. It is not the author's account, and where our understanding may be wrong, we say so.</p>
-  <p>The author has since said that the archive is full of unnecessary material and that most of it will probably turn out not to be needed (<a href="https://x.com/__alpoge__/status/2124987173439209561">post of 24 November 2026</a>). That is why we checked every name we followed against the list of declarations the final theorem actually uses: the map shows only parts the proof depends on.</p>
+  <p>The author has since said that the archive is full of unnecessary material and that most of it will probably turn out not to be needed (<a href="https://x.com/__alpoge__/status/2124987173439209561">post of 24 November 2026</a>). That is why we checked every name we followed against the list of declarations the final theorem actually uses. Every Lean name on the map is one the final theorem depends on; cards without a Lean name, such as Poitou–Tate or Ribet's congruences, are our identification by type.</p>
 
   <h2>Status</h2>
   <div class="status">
@@ -52,7 +52,7 @@
     <li><strong>Top:</strong> the chain of conclusions, from a count of divisibility over the primes to the absence of zeros with real part above 1/2.</li>
     <li><strong>Columns:</strong> steps 2 to 4 of the argument, and the four supports the construction rests on.</li>
     <li><span class="key"></span><strong>White cards:</strong> known results from the literature.</li>
-    <li><span class="key pink"></span><strong>Pink cards:</strong> what we read as the author's own contribution.</li>
+    <li><span class="key pink"></span><strong>Pink cards:</strong> what we read as new in this proof. The proof is by Alpöge and Claude; we do not know which of them each idea came from.</li>
     <li><strong>Third line of a card:</strong> its name in the Lean archive and how deep we read it: down to the published source, or only its statement.</li>
   </ul>
 
