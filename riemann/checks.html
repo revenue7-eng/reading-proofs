@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The checks: numbers we computed while reading</title>
+<meta name="description" content="Five numerical checks we ran while reading the proof of the Riemann Hypothesis, with the code and the numbers it gives: the factorial misses Euler's constant, the Nair and Chudnovsky method stops at 0.99, the CM period carries gamma minus L'/L(1, chi), Green's weights, and where 1801 comes from.">
+<style>
+  :root { --ink:#1d1d1b; --quiet:#5b5b57; --rule:#e3e1da; --bg:#fbfaf7; --accent:#2f5d8a; --pink:#f9d9df; --ok:#2e7d4f; }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink:#ecebe6; --quiet:#a9a8a2; --rule:#3a3a37; --bg:#191918; --accent:#8fb6dc; --pink:#4a2f35; --ok:#7fcf9d; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font: 18px/1.6 Georgia, "Iowan Old Style", "Times New Roman", serif; }
+  main { max-width: 680px; margin: 0 auto; padding: 64px 24px 96px; }
+  h1 { font-size: 40px; line-height:1.15; margin:0 0 16px; font-weight: 600; }
+  .lede { font-size: 21px; color: var(--quiet); margin: 0 0 32px; }
+  h2 { font: 600 15px/1.4 system-ui, sans-serif; letter-spacing:.06em; text-transform:uppercase; color:var(--quiet); margin: 44px 0 12px; padding-top: 22px; border-top: 1px solid var(--rule); }
+  p { margin: 0 0 16px; }
+  a { color: var(--accent); }
+  .status { border-left: 3px solid var(--accent); padding: 4px 0 4px 16px; }
+  .formula { font-family: "Cambria Math", "STIX Two Math", Georgia, serif; text-align: center; margin: 8px 0 18px; font-size: 19px; }
+  footer { margin-top: 64px; font: 12px/1.5 system-ui, sans-serif; color: var(--quiet); }
+  table { width:100%; border-collapse: collapse; font: 14px/1.45 system-ui, sans-serif; margin: 4px 0 16px; font-variant-numeric: tabular-nums; }
+  th, td { text-align:left; padding: 7px 8px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { color: var(--quiet); font-weight: 600; }
+  code { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .tool { font: 15px/1.5 system-ui, sans-serif; margin: 8px 0 20px; padding: 16px; border: 1px solid var(--rule); border-radius: 8px; }
+  .seg { display:flex; gap:6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .seg button { font: 600 14px/1 system-ui, sans-serif; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--rule); background: transparent; color: var(--ink); cursor: pointer; }
+  .seg button.on { border-color: var(--accent); color: var(--accent); }
+  .verdict { font-weight: 600; margin-top: 8px; color: var(--ok); }
+  .role { display:block; margin-top:3px; color:var(--quiet); font-size:13px; }
+  tr:target td { background:#fff1c2; }
+  h2:target { color:var(--accent); }
+  tr, h2 { scroll-margin-top: 24px; }
+  @media (prefers-color-scheme: dark) { tr:target td { background:#4a4220; } }
+  pre { font: 12.5px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; background: transparent; border: 1px solid var(--rule); border-radius: 8px; padding: 12px 14px; overflow-x: auto; margin: 4px 0 16px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>The checks</h1>
+  <p class="lede">Numbers we computed while reading, to see that a claim holds where we could test it. Each check is a short program in plain Python; the numbers below are what it prints.</p>
+  <p><a href="index.html">The architecture of a proof</a> &nbsp; <a href="map.html">The map</a></p>
+  <p class="status">These are sanity checks, not part of the proof and not proofs of anything. A check that agrees shows that we read a statement correctly, or that an identity holds in the cases we tried. The live checks on the other pages are listed at the end.</p>
+
+  <h2 id="factorial">The factorial misses Euler's constant</h2>
+  <p>On <a href="size.html">the size page</a> we say that the factorial cannot serve as the proof's object: its size and its divisibility come from the same formula, and it misses the term γ·a that the true prime count contains. By Legendre, ln(a!) is the sum of Λ(n)·⌊a/n⌋. The prime count wants Λ(n)·(a/n − 1), whose main term is a ln a − (1 + γ)a. The program measures the difference per unit of a, and the average fractional part that causes it.</p>
+  <pre><code># The factorial misses Euler&#x27;s constant.
+# ln(a!) = sum over n &lt;= a of Lambda(n) * floor(a/n)  (Legendre).
+# The true prime count wants sum of Lambda(n) * (a/n - 1), whose main term is
+# a ln a - (1 + gamma) a.  The difference per unit of a tends to gamma.
+import math
+
+GAMMA = 0.5772156649015329
+
+def mangoldt_table(N):
+    lam = [0.0] * (N + 1)
+    sieve = bytearray([1]) * (N + 1)
+    for p in range(2, N + 1):
+        if sieve[p]:
+            for k in range(p * p, N + 1, p):
+                sieve[k] = 0
+            q = p
+            while q &lt;= N:
+                lam[q] = math.log(p)
+                q *= p
+    return lam
+
+N = 10**6
+lam = mangoldt_table(N)
+for a in (10**3, 10**4, 10**5, 10**6):
+    lnfact = math.lgamma(a + 1)
+    frac = sum(lam[n] * ((a / n) % 1) for n in range(2, a + 1)) / a
+    gap = (lnfact - (a * math.log(a) - (1 + GAMMA) * a)) / a
+    print(a, round(frac, 4), round(gap, 4))
+print(&quot;1 - gamma =&quot;, round(1 - GAMMA, 4), &quot; gamma =&quot;, round(GAMMA, 4))</code></pre>
+  <table>
+    <tr><th>a</th><th>Σ Λ(n){a/n} / a</th><th>(ln a! − main term) / a</th></tr>
+    <tr><td>10³</td><td>0.4166</td><td>0.5816</td></tr><tr><td>10⁴</td><td>0.4237</td><td>0.5778</td></tr><tr><td>10⁵</td><td>0.4233</td><td>0.5773</td></tr><tr><td>10⁶</td><td>0.4224</td><td>0.5772</td></tr>
+  </table>
+  <p>The gap tends to γ = 0.5772, and the fractional parts average to 1 − γ = 0.4228. The proof's object closes exactly this gap with the period of a CM field.</p>
+
+  <h2 id="nair">Nair and Chudnovsky stop at 0.99</h2>
+  <p>Among the simpler objects we tried in place of the ladder were the auxiliary polynomials of Gelfond and Schnirelmann. In many variables, as Nair and Chudnovsky set it up, the object is a Hankel determinant D whose size comes from Selberg's integral. The method gives a lower bound for the summed prime count with a constant just below 1.</p>
+  <pre><code># Nair and Chudnovsky: a Hankel determinant from Selberg&#x27;s integral.
+# D = prod_{j&lt;n} j! * ((A+j-1)!)^2 / (2A+n+j-2)!,  A = [s n],  s = 0.39191162.
+# The method gives psi1(2A+2n) - psi1(2A+n) &gt;= -ln D, psi1(x) = sum_{k&lt;=x} psi(k),
+# whose main term is ((2A+2n)^2 - (2A+n)^2) / 2.  The ratio tends to 0.99035, not 1.
+import math
+
+s = 0.39191162
+lf = lambda k: math.lgamma(k + 1)
+for n in (200, 500, 1000, 2000, 4000):
+    A = int(s * n)
+    lnD = sum(lf(j) + 2 * lf(A + j - 1) - lf(2 * A + n + j - 2) for j in range(n))
+    main = ((2 * A + 2 * n) ** 2 - (2 * A + n) ** 2) / 2
+    print(n, round(-lnD / main, 4))
+print(&quot;limit quoted by Nair and Chudnovsky: 0.99035&quot;)</code></pre>
+  <table>
+    <tr><th>n</th><th>−ln D / main term</th></tr>
+    <tr><td>200</td><td>0.982</td></tr><tr><td>500</td><td>0.987</td></tr><tr><td>1000</td><td>0.9887</td></tr><tr><td>2000</td><td>0.9895</td></tr><tr><td>4000</td><td>0.9899</td></tr>
+  </table>
+  <p>The ratio approaches 0.99035 and stays below 1. While reading we also found that, in every case we checked, D is the reciprocal of a whole number, so its size and its divisibility come from one formula again, and that the loss sits on primes of size about n. By Pritsker's argument, any fixed weight of this kind gives a constant below 1, which is why the proof needs a parameter that grows.</p>
+
+  <h2 id="cm-height">The period of a CM curve carries γ − L′/L(1, χ)</h2>
+  <p>On <a href="size.html">the size page</a> the period of the field carries exactly the constants of the prime count. For an imaginary quadratic field this is the formula of Lerch, Chowla and Selberg, usually written at s = 0. The program computes the same number twice: once at s = 0, and once at s = 1 in the form the proof's main term uses, with γ − L′/L(1, χ). Both are evaluated from the L-function itself.</p>
+  <pre><code># The period of a CM curve carries gamma - L&#x27;/L(1, chi).
+# Lerch, Chowla-Selberg: h = -(1/2) L&#x27;/L(0, chi) - (1/4) ln d - (1/2) ln(2 pi).
+# Moved to s = 1 by the functional equation, the same number is
+# h = -(1/2) (gamma - L&#x27;/L(1, chi)) + (1/4) ln d - ln(2 pi).
+# Both sides are computed independently from the L-function.
+from mpmath import mp, mpf, dirichlet, log, pi, euler
+
+mp.dps = 30
+
+def chi_table(d):
+    # the quadratic character of Q(sqrt(-d)), as a list of values mod its conductor
+    if d == 4:
+        return [0, 1, 0, -1]
+    if d == 8:
+        return [0, 1, 0, 1, 0, -1, 0, -1]
+    return [0] + [1 if pow(k, (d - 1) // 2, d) == 1 else -1 for k in range(1, d)]
+
+for d in (3, 4, 7, 8):
+    chi = chi_table(d)
+    l0, dl0 = dirichlet(0, chi), dirichlet(0, chi, 1)
+    l1, dl1 = dirichlet(1, chi), dirichlet(1, chi, 1)
+    h_at_0 = -dl0 / (2 * l0) - log(d) / 4 - log(2 * pi) / 2
+    h_at_1 = -(euler - dl1 / l1) / 2 + log(d) / 4 - log(2 * pi)
+    print(d, mp.nstr(h_at_0, 12), mp.nstr(h_at_1, 12), mp.nstr(abs(h_at_0 - h_at_1), 3))</code></pre>
+  <table>
+    <tr><th>d</th><th>from s = 0</th><th>from s = 1</th><th>difference</th></tr>
+    <tr><td>3</td><td>−1.66769101871</td><td>−1.66769101871</td><td>0</td></tr><tr><td>4</td><td>−1.65710651619</td><td>−1.65710651619</td><td>0</td></tr><tr><td>7</td><td>−1.6321895166</td><td>−1.6321895166</td><td>2 × 10⁻³¹</td></tr><tr><td>8</td><td>−1.61698021634</td><td>−1.61698021634</td><td>0</td></tr>
+  </table>
+  <p>The two forms agree to the working precision of 30 digits. The normalisation of the height varies between sources by constants involving ln 2 and ln π; the check is that the same combination γ − L′/L(1, χ) appears, with the same signs, as in the archive's period.</p>
+
+  <h2 id="green">Green's weights tend to 1 − 1/g</h2>
+  <p>On <a href="degenerate.html">the page on few bad members</a>, each member of the family carries a label at two auxiliary primes: a polynomial over the field with g elements. A label without repeated factors has weight 1/∏(g<sup>deg P</sup> − 1) over its irreducible factors P. The program adds up these weights exactly, in fractions.</p>
+  <pre><code># Green&#x27;s weights for labels over F_g.
+# A label is a monic squarefree polynomial of degree r with nonzero constant term.
+# Its weight is the product over its irreducible factors P of 1 / (g^deg P - 1).
+# The total weight of all labels of degree r tends to 1 - 1/g.
+from fractions import Fraction
+
+def irreducible_counts(g, r):
+    # number of monic irreducible polynomials of each degree over F_g, Gauss&#x27;s formula
+    def mobius(n):
+        res, m, p = 1, n, 2
+        while p * p &lt;= m:
+            if m % p == 0:
+                m //= p
+                if m % p == 0:
+                    return 0
+                res = -res
+            p += 1
+        return -res if m &gt; 1 else res
+    N = {d: sum(mobius(d // e) * g**e for e in range(1, d + 1) if d % e == 0) // d
+         for d in range(1, r + 1)}
+    N[1] -= 1          # drop P = x: the constant term must be nonzero
+    return N
+
+def total_weight(g, r):
+    poly = [Fraction(0)] * (r + 1)
+    poly[0] = Fraction(1)
+    for d, count in irreducible_counts(g, r).items():
+        w = Fraction(1, g**d - 1)
+        for _ in range(count):          # each irreducible is used at most once
+            for k in range(r, d - 1, -1):
+                poly[k] += poly[k - d] * w
+    return poly[r]
+
+for g in (5, 7, 11):
+    row = [float(total_weight(g, r)) for r in (2, 4, 6, 8)]
+    print(g, [round(v, 4) for v in row], &quot;1 - 1/g =&quot;, round(1 - 1 / g, 4))</code></pre>
+  <table>
+    <tr><th>g</th><th>degree 2</th><th>degree 4</th><th>degree 6</th><th>degree 8</th><th>1 − 1/g</th></tr>
+    <tr><td>5</td><td>0.7917</td><td>0.8012</td><td>0.8001</td><td>0.8</td><td>0.8</td></tr><tr><td>7</td><td>0.8542</td><td>0.8575</td><td>0.8572</td><td>0.8571</td><td>0.8571</td></tr><tr><td>11</td><td>0.9083</td><td>0.9092</td><td>0.9091</td><td>0.9091</td><td>0.9091</td></tr>
+  </table>
+  <p>The good labels carry weight 1 − 1/g, so the bad ones weigh about 1/g, comfortably inside the bound of 3/g the archive uses. We have not checked in the archive that the total weight of all labels is exactly 1.</p>
+
+  <h2 id="r1801">Where 1801 comes from</h2>
+  <p>On <a href="prohibition.html">the prohibition page</a> the rank of the unitary group is at least 1801, and we call it a safety margin. The archive asks for 120·n·q<sup>3/2</sup> ≤ n³ with q ≤ n/2. At q = n/2 this becomes n ≥ (120 / 2<sup>3/2</sup>)² = 1800 exactly.</p>
+  <pre><code># Where 1801 comes from.
+# The archive needs 120 n q^(3/2) &lt;= n^3 with q &lt;= n/2.  At q = n/2 this reads
+# 120 (n/2)^(3/2) &lt;= n^2, that is n &gt;= (120 / 2^(3/2))^2 = 1800 exactly.
+import math
+
+print(&quot;(120 / 2^1.5)^2 =&quot;, (120 / 2**1.5) ** 2)
+for n in (1799, 1800, 1801):
+    print(n, 120 * n * (n / 2) ** 1.5 &lt;= n**3)</code></pre>
+  <table>
+    <tr><th>n</th><th>inequality holds</th></tr>
+    <tr><td>1799</td><td>no</td></tr><tr><td>1800</td><td>yes, with equality</td></tr><tr><td>1801</td><td>yes</td></tr>
+  </table>
+  <p>So 1801 is the first whole number strictly past the exact threshold 1800. We found this inequality in a branch of the archive that the final proof does not use; on the path the same threshold appears in a bound that holds from n = 900 on, and the inequalities stated under the condition r ≥ 1801 already hold from n = 2. That is why we read 1801 as a margin.</p>
+
+  <h2>The live checks on the other pages</h2>
+  <ul>
+    <li><a href="stepanov.html">Stepanov's method</a>: a live count of I₁, I₋₁, I₀.</li>
+    <li><a href="frobenius.html">A Frobenius at every inert prime</a>: the congruence with x + x<sup>p²</sup> and the radius of the p-adic exponential.</li>
+    <li><a href="size.html">The right size</a>: the lemniscate constant from γ − L′/L(1, χ).</li>
+    <li><a href="ladder.html">The ladder of lifts</a>: the identity that makes the added blocks cancel.</li>
+    <li><a href="degenerate.html">Few bad members</a>: the share of degenerate matrices in GL<sub>2</sub>(F<sub>q</sub>).</li>
+    <li><a href="balance.html">The balance</a>: the best length of the ladder, x/m + m against x/m + m².</li>
+  </ul>
+
+  <h2>What these checks do not do</h2>
+  <p class="status">This page is our work, not the author's and not a part of the archive. The programs run in seconds on an ordinary computer and use only the Python standard library, except the CM check, which needs mpmath. They test statements in small cases; none of them checks the archive's statements themselves, which the machine has already checked.</p>
+
+  <footer>
+    <p>Corrections are welcome: <a href="https://github.com/revenue7-eng/reading-proofs/issues">open an issue</a>.</p>
+  </footer>
+</main>
+</body>
+</html>
