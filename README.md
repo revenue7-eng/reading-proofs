@@ -6,4 +6,3 @@ How we read and understand proofs written for machines. A reader's account, not 
 
 Corrections are welcome as issues.
 
-Andrey Lazarev, mathematician by training, Candidate of Sciences (PhD) in Physics and Mathematics. 
