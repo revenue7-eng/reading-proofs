@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Few bad members: why almost every object in the family works</title>
+<meta name="description" content="One part of the proof of the Riemann Hypothesis, as we read it: Green's theory of characters gives the exact weight of degenerate local types, about 1/q, and a counting theorem shows the family follows those weights. With a live count in GL2.">
+<style>
+  :root { --ink:#1d1d1b; --quiet:#5b5b57; --rule:#e3e1da; --bg:#fbfaf7; --accent:#2f5d8a; --pink:#f9d9df; --ok:#2e7d4f; }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink:#ecebe6; --quiet:#a9a8a2; --rule:#3a3a37; --bg:#191918; --accent:#8fb6dc; --pink:#4a2f35; --ok:#7fcf9d; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font: 18px/1.6 Georgia, "Iowan Old Style", "Times New Roman", serif; }
+  main { max-width: 680px; margin: 0 auto; padding: 64px 24px 96px; }
+  h1 { font-size: 40px; line-height:1.15; margin:0 0 16px; font-weight: 600; }
+  .lede { font-size: 21px; color: var(--quiet); margin: 0 0 32px; }
+  h2 { font: 600 15px/1.4 system-ui, sans-serif; letter-spacing:.06em; text-transform:uppercase; color:var(--quiet); margin: 44px 0 12px; padding-top: 22px; border-top: 1px solid var(--rule); }
+  p { margin: 0 0 16px; }
+  a { color: var(--accent); }
+  .status { border-left: 3px solid var(--accent); padding: 4px 0 4px 16px; }
+  .formula { font-family: "Cambria Math", "STIX Two Math", Georgia, serif; text-align: center; margin: 8px 0 18px; font-size: 19px; }
+  footer { margin-top: 64px; font: 12px/1.5 system-ui, sans-serif; color: var(--quiet); }
+  table { width:100%; border-collapse: collapse; font: 14px/1.45 system-ui, sans-serif; margin: 4px 0 16px; font-variant-numeric: tabular-nums; }
+  th, td { text-align:left; padding: 7px 8px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { color: var(--quiet); font-weight: 600; }
+  code { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .tool { font: 15px/1.5 system-ui, sans-serif; margin: 8px 0 20px; padding: 16px; border: 1px solid var(--rule); border-radius: 8px; }
+  .seg { display:flex; gap:6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .seg button { font: 600 14px/1 system-ui, sans-serif; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--rule); background: transparent; color: var(--ink); cursor: pointer; }
+  .seg button.on { border-color: var(--accent); color: var(--accent); }
+  .verdict { font-weight: 600; margin-top: 8px; color: var(--ok); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Few bad members</h1>
+  <p class="lede">The argument needs almost every member of its family to be well behaved. Here is how the proof knows that the bad ones are rare.</p>
+  <p><a href="index.html">The architecture of a proof</a> &nbsp; <a href="map.html">The map</a> &nbsp; <a href="prohibition.html">The prohibition</a></p>
+
+  <h2>Why it matters</h2>
+  <p>The proof does not work with one object but with a whole family of them. For the divisibility and <a href="prohibition.html">the prohibition</a> to combine, the family must be nonzero where it counts: a member whose local behaviour at some prime is degenerate contributes nothing useful, and if too many members were like that, the bound would collapse. So the proof needs to know that degenerate members are a small share, and how small.</p>
+
+  <h2>Exact weights in a finite group</h2>
+  <p>At each prime, the local behaviour of a member is described by a type, a representation of the finite group GL<sub>n</sub>(F<sub>q</sub>) of invertible matrices over a field with q elements. J. A. Green worked out the characters of these groups in 1955. From his theory the proof reads off the exact weight of each local type, and the degenerate ones weigh about 1/q.</p>
+  <p>The flavour of this is easy to see in the smallest case. In GL<sub>2</sub>(F<sub>q</sub>), the matrices whose two eigenvalues coincide are the degenerate ones, and their share is exactly</p>
+  <p class="formula">q / (q² − 1) ≈ 1/q</p>
+  <p>The tool below counts every invertible 2 × 2 matrix over F<sub>q</sub> and checks this. It is an illustration of why degenerate things weigh about 1/q, not the archive's statement, which is about the types of representations in higher rank.</p>
+  <div class="tool">
+    <div class="seg" id="qSeg"></div>
+    <table id="tab"></table>
+    <div class="verdict" id="verdict"></div>
+  </div>
+  <p>A small coincidence: q/(q² − 1) is the same expression as the weight of the gain at an inert prime on <a href="frobenius.html">the Frobenius page</a>. We have not looked for a link between the two and do not claim one.</p>
+
+  <h2>The family follows the weights</h2>
+  <p>Exact weights in a finite group would be of little use if the family ignored them. A counting theorem for automorphic forms, with an exponentially small error, shows that the members of the family are distributed according to these weights. Its only input from outside the archive is the Siegel–Weil formula for volumes.</p>
+  <p>The large gap between parameters that the archive asks for does its work here, in the counting theorem, and nowhere else that we found.</p>
+
+  <h2>What it is built from</h2>
+  <table>
+    <tr><th>Piece</th><th>Known from</th><th>In the archive</th><th>How deep we read</th></tr>
+    <tr><td>Characters of GL over F<sub>q</sub>; bad weights about 1/q</td><td>Green, 1955</td><td><code>LinkIRR</code></td><td>to the published source</td></tr>
+    <tr><td>Siegel–Weil formula for volumes, the counting theorem's one outside input</td><td>Weil, 1965</td><td></td><td>the statement</td></tr>
+  </table>
+  <p>When we began, Green's theorem looked like a deep input. It turned out to be exact bookkeeping in a finite group; the real work of this support is done by the counting theorem.</p>
+
+  <h2>What we have and have not read</h2>
+  <p class="status">This page is our reading of the formal proof, not the author's account. We did not read the analytic estimates inside the counting theorem. The count in GL<sub>2</sub> above is our illustration, not part of the archive.</p>
+
+  <footer>
+    <p>Corrections are welcome: <a href="https://github.com/revenue7-eng/reading-proofs/issues">open an issue</a>.</p>
+  </footer>
+</main>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var primes = [2, 3, 5, 7, 11, 13];
+  var cur = 5;
+  function gcd(a, b) { while (b) { var t = a % b; a = b; b = t; } return a; }
+  function cell(tr, text, tag) { var c = document.createElement(tag || 'td'); c.textContent = text; tr.appendChild(c); }
+  function draw() {
+    var box = $('qSeg'); box.innerHTML = '';
+    primes.forEach(function (q) {
+      var b = document.createElement('button'); b.type = 'button'; b.textContent = 'q = ' + q;
+      if (q === cur) b.className = 'on';
+      b.addEventListener('click', function () { cur = q; draw(); });
+      box.appendChild(b);
+    });
+    var q = cur, tot = 0, bad = 0;
+    for (var a = 0; a < q; a++) for (var b2 = 0; b2 < q; b2++) for (var c = 0; c < q; c++) for (var d = 0; d < q; d++) {
+      var det = ((a * d - b2 * c) % q + q) % q;
+      if (det === 0) continue;
+      tot++;
+      var t = (a + d) % q;
+      var disc = q === 2 ? (t * t) % q : (((t * t - 4 * det) % q) + q) % q;
+      if (disc === 0) bad++;
+    }
+    var g = gcd(bad, tot), num = q, den = q * q - 1, g2 = gcd(num, den);
+    var tab = $('tab'); tab.innerHTML = '';
+    var h = document.createElement('tr'); ['', 'count'].forEach(function (s) { cell(h, s, 'th'); }); tab.appendChild(h);
+    [['invertible 2 × 2 matrices', tot.toLocaleString('en')],
+     ['with a repeated eigenvalue', bad.toLocaleString('en')],
+     ['share, counted', (bad / g) + '/' + (tot / g) + ' ≈ ' + (bad / tot).toFixed(4)],
+     ['q / (q² − 1)', (num / g2) + '/' + (den / g2) + ' ≈ ' + (num / den).toFixed(4)],
+     ['1/q', (1 / q).toFixed(4)]].forEach(function (r) {
+      var tr = document.createElement('tr'); cell(tr, r[0]); cell(tr, r[1]); tab.appendChild(tr);
+    });
+    $('verdict').textContent = (bad * den === num * tot) ? 'The count matches q / (q² − 1) exactly.' : 'Mismatch (this should not happen).';
+  }
+  draw();
+})();
+</script>
+</body>
+</html>

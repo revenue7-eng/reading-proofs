@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The prohibition: no more divisibility than the size allows</title>
+<meta name="description" content="One part of the proof of the Riemann Hypothesis, as we read it: Bost's slope inequality as the analogue of 'no more zeros than the degree', and the frame that lets it work for many lattices at once.">
+<style>
+  :root { --ink:#1d1d1b; --quiet:#5b5b57; --rule:#e3e1da; --bg:#fbfaf7; --accent:#2f5d8a; --pink:#f9d9df; }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink:#ecebe6; --quiet:#a9a8a2; --rule:#3a3a37; --bg:#191918; --accent:#8fb6dc; --pink:#4a2f35; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font: 18px/1.6 Georgia, "Iowan Old Style", "Times New Roman", serif; }
+  main { max-width: 680px; margin: 0 auto; padding: 64px 24px 96px; }
+  h1 { font-size: 40px; line-height:1.15; margin:0 0 16px; font-weight: 600; }
+  .lede { font-size: 21px; color: var(--quiet); margin: 0 0 32px; }
+  h2 { font: 600 15px/1.4 system-ui, sans-serif; letter-spacing:.06em; text-transform:uppercase; color:var(--quiet); margin: 44px 0 12px; padding-top: 22px; border-top: 1px solid var(--rule); }
+  p { margin: 0 0 16px; }
+  a { color: var(--accent); }
+  .status { border-left: 3px solid var(--accent); padding: 4px 0 4px 16px; }
+  footer { margin-top: 64px; font: 12px/1.5 system-ui, sans-serif; color: var(--quiet); }
+  table { width:100%; border-collapse: collapse; font: 14px/1.45 system-ui, sans-serif; margin: 4px 0 16px; }
+  th, td { text-align:left; padding: 7px 8px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { color: var(--quiet); font-weight: 600; }
+  code { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; }
+</style>
+</head>
+<body>
+<main>
+  <h1>The prohibition</h1>
+  <p class="lede">A nonzero object cannot be more divisible than its size allows. Here is the form this takes in the proof, and what it needs in order to work.</p>
+  <p><a href="index.html">The architecture of a proof</a> &nbsp; <a href="map.html">The map</a> &nbsp; <a href="ladder.html">The ladder of lifts</a></p>
+
+  <h2>Stepanov's second move</h2>
+  <p>In Stepanov's proof the prohibition is one line: a polynomial that is not identically zero has no more zeros, counted with multiplicity, than its degree. Many solutions, each a zero of high order, force the degree up, and that bounds the count.</p>
+  <p>For whole numbers the same idea reads: a nonzero whole number divisible by many primes, many times, cannot be small. The proof needs this not for one number but for maps between lattices, the many-dimensional cousins of whole numbers.</p>
+
+  <h2>Slopes</h2>
+  <p>A lattice with a way to measure lengths has an arithmetic slope: roughly, the average logarithm of how densely it is packed, per dimension. A lattice that is divisible by a prime is packed more densely, so its slope goes up.</p>
+  <p>Bost's slope inequality says that a nonzero map from one such lattice to another cannot raise the slope by more than the size of the map. In plain words: an injective map of lattices cannot be too divisible compared with its size. This is the exact analogue of "no more zeros than the degree", and in the proof it plays that part.</p>
+
+  <h2>Why one map is not enough</h2>
+  <p>One map controls only the largest slope of the target lattice, its single most divisible direction. The proof needs control in every direction at once, so it uses many maps whose images spread evenly over the target.</p>
+  <p>As we read the archive, this is done with a nearly orthogonal frame: a family of subspaces, together about 20 times the dimension of the target, that overlap no more than random ones would. Such a frame comes from the discrete series of a large unitary group U(r), through Schur orthogonality and the fast decay of matrix coefficients.</p>
+  <p>The constant here looks frightening: a rank r of at least 1801. It is a safety margin, not a sharp threshold; we checked by computer that it is not where the argument is tight. The large gap between parameters that the archive also asks for does its work elsewhere, in the counting theorem behind <a href="degenerate.html">the next support</a>.</p>
+
+  <h2>Where our reading differs from Rubinstein's guide</h2>
+  <p class="status">Rubinstein's guide describes the step that spreads the images evenly through a relative trace formula of Jacquet and an approximate orthogonality. We describe it through the discrete series of U(r) and Schur orthogonality. We read this layer only at the level of statements, so on this point his description deserves more trust than ours. Both readings agree on what the step must deliver: images spread evenly enough that the slope inequality controls every direction.</p>
+
+  <h2>What it is built from</h2>
+  <table>
+    <tr><th>Piece</th><th>Known from</th><th>In the archive</th><th>How deep we read</th></tr>
+    <tr><td>Slope inequality</td><td>Bost</td><td><code>SlopeInequality</code></td><td>to the published source</td></tr>
+    <tr><td>Discrete series of the unitary group</td><td>Harish-Chandra</td><td><code>IsDS</code></td><td>the statement</td></tr>
+    <tr><td>Schur orthogonality, Bessel model</td><td>decay after Wu</td><td><code>LinkS</code>, <code>WuDecay</code></td><td>the statement</td></tr>
+  </table>
+  <p>Every piece is known. The slope inequality is the one we followed down to its source; the frame we read only as statements.</p>
+
+  <h2>How it fits</h2>
+  <p>The ladder makes the objects very divisible: <a href="ladder.html">m times the local gain</a>. <a href="size.html">The size</a> is known exactly. The prohibition says divisibility cannot exceed size. Set the two against each other, and what is left is a bound on the error in the prime count, with the length of the ladder still free. Choosing it well is <a href="balance.html">the balance</a>.</p>
+  <p>The same plain fact sits underneath all of this: a nonzero whole number is at least 1. It appears in the count of divisibility, in the slope inequality, and in <a href="integer.html">the integer that closes the hardest case</a>. We offer this as an observation, not as a claim about the proof.</p>
+
+  <footer>
+    <p>Corrections are welcome: <a href="https://github.com/revenue7-eng/reading-proofs/issues">open an issue</a>.</p>
+  </footer>
+</main>
+</body>
+</html>
