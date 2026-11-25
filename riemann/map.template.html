@@ -51,6 +51,7 @@
   .mk { fill:var(--line); }
   .link { cursor:pointer; }
   .shape.link:hover rect, .sect.link:hover rect { stroke:var(--line); stroke-width:2.4; }
+  foreignObject.link:hover .tbl table, foreignObject.link:hover .txt { outline:2px solid var(--line); outline-offset:4px; }
 </style>
 </head>
 <body>
@@ -108,6 +109,7 @@ for (const e of EL) {
     const w = e.wrap || 2000;
     const [fo, d] = html(gTop, e.x, e.y, w, 600, 'txt sz-' + (e.size || 'body'));
     for (const line of e.text.split('\n')) { const p = document.createElementNS(XH, 'p'); p.style.margin = '0'; inline(p, line); d.appendChild(p); }
+    if (e.href) { fo.setAttribute('data-href', e.href); fo.setAttribute('class', 'link'); }
     box[e.id] = {x:e.x, y:e.y, w, h:0, fo, d};
   } else if (e.type === 'table') {
     const w = e.cols.reduce((a, b) => a + b, 0);
@@ -119,6 +121,7 @@ for (const e of EL) {
       t.appendChild(tr);
     });
     d.appendChild(t);
+    if (e.href) { fo.setAttribute('data-href', e.href); fo.setAttribute('class', 'link'); }
     box[e.id] = {x:e.x, y:e.y, w, h:0, fo, d, tbl:t};
   }
 }

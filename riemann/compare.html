@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stepanov and the new proof, side by side</title>
+<meta name="description" content="How the proof of the Riemann Hypothesis follows Stepanov's 1969 method move by move, and where the analogy breaks: no single Frobenius, the price of every rung, the step from 'not zero' to a whole family, and the passage to all primes. Our reading.">
+<style>
+  :root { --ink:#1d1d1b; --quiet:#5b5b57; --rule:#e3e1da; --bg:#fbfaf7; --accent:#2f5d8a; --pink:#f9d9df; }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink:#ecebe6; --quiet:#a9a8a2; --rule:#3a3a37; --bg:#191918; --accent:#8fb6dc; --pink:#4a2f35; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font: 18px/1.6 Georgia, "Iowan Old Style", "Times New Roman", serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 64px 24px 96px; }
+  h1 { font-size: 40px; line-height:1.15; margin:0 0 16px; font-weight: 600; }
+  .lede { font-size: 21px; color: var(--quiet); margin: 0 0 32px; }
+  h2 { font: 600 15px/1.4 system-ui, sans-serif; letter-spacing:.06em; text-transform:uppercase; color:var(--quiet); margin: 44px 0 12px; padding-top: 22px; border-top: 1px solid var(--rule); }
+  h3 { font-size: 20px; margin: 26px 0 8px; }
+  p { margin: 0 0 16px; }
+  a { color: var(--accent); }
+  .status { border-left: 3px solid var(--accent); padding: 4px 0 4px 16px; }
+  footer { margin-top: 64px; font: 12px/1.5 system-ui, sans-serif; color: var(--quiet); }
+  table { width:100%; border-collapse: collapse; font: 14px/1.45 system-ui, sans-serif; margin: 4px 0 16px; }
+  th, td { text-align:left; padding: 8px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { color: var(--quiet); font-weight: 600; }
+  td:first-child { font-weight: 600; width: 18%; }
+  tr.new td:nth-child(3) { background: var(--pink); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Stepanov and the new proof, side by side</h1>
+  <p class="lede">The proof follows Stepanov's three moves over the whole numbers. Here is the match, row by row, and the four places where it stops being a match. Those four places are where, as we read it, the new ideas are.</p>
+  <p><a href="index.html">The architecture of a proof</a> &nbsp; <a href="stepanov.html">Stepanov's method</a> &nbsp; <a href="map.html">The map</a></p>
+
+  <h2>The dictionary</h2>
+  <p>Left: <a href="stepanov.html">Stepanov's 1969 proof</a> for y² = f(x) over the integers modulo p. Right: the proof of the Riemann Hypothesis, as we read it. Each row on the right links to the page about that part. Shaded rows are where the right-hand side is not a translation but a new construction.</p>
+  <table>
+    <tr><th>Role</th><th>Stepanov, 1969</th><th>The new proof</th></tr>
+    <tr class="new"><td>The tool</td><td>one Frobenius: every point satisfies x<sup>p</sup> − x = 0</td><td>no single Frobenius; one CM field gives <a href="frobenius.html">a local one at every inert prime</a></td></tr>
+    <tr><td>What is counted</td><td>points sorted by whether f(x) is a square: f(x)<sup>(p−1)/2</sup> = ±1</td><td>prime powers, sorted by the characters of an abelian field; a sum over primes written as a count of divisibility</td></tr>
+    <tr><td>The object</td><td>a polynomial with unknown coefficients</td><td>lattices of polynomials, <a href="size.html">normed by the CM period</a></td></tr>
+    <tr><td>Making it exist</td><td>linear algebra: more unknowns than equations</td><td>theta lifts, <a href="integrality.html">whole numbers on every rung</a>, and <a href="family.html">a family of data</a></td></tr>
+    <tr class="new"><td>Multiplicity</td><td>zeros of order 2m, cheap because the derivative of x<sup>p</sup> is 0</td><td><a href="ladder.html">a ladder of m lifts</a>; a Hecke polynomial repeats the gain on every rung</td></tr>
+    <tr class="new"><td>Not zero</td><td>the terms differ in the parity of their degree, because n is odd</td><td><a href="degenerate.html">almost every member of the family is nonzero</a>, and the hard case is closed by <a href="integer.html">one nonzero integer</a></td></tr>
+    <tr><td>The prohibition</td><td>no more roots than the degree</td><td><a href="prohibition.html">Bost's slope inequality</a>, spread by a nearly orthogonal frame</td></tr>
+    <tr class="new"><td>The balance</td><td>p/m against (n − 1)m</td><td><a href="balance.html">x/m against m</a>, and m only because <a href="integer.html">each rung is cheap</a></td></tr>
+    <tr><td>The result</td><td>|I<sub>p</sub> − p| ≤ √(3n)·n·√p</td><td>a smoothed prime sum is at most x<sup>1/2 + ε</sup> on long windows</td></tr>
+    <tr><td>The other half</td><td>an upper bound on one class of points is a lower bound on the other</td><td>a Landau-type lemma turns the bound into the absence of zeros</td></tr>
+  </table>
+  <p>Read down the left column and you have Stepanov's proof; read down the right and you have the skeleton of the new one. The two are the same shape. The author himself calls the first step of his argument a "Stepanov determinant".</p>
+
+  <h2>Where the analogy breaks</h2>
+
+  <h3>1. There is no single Frobenius</h3>
+  <p>Stepanov's whole method rests on one fact that holds at every point at once: x<sup>p</sup> = x. The whole numbers have nothing like it. Each prime has its own clock arithmetic and its own Frobenius, and they do not fit together.</p>
+  <p>The new proof does not look for a global replacement. It splits the work of the one tool into three roles: a local Frobenius at every inert prime, the size of the objects, and the sorting of the primes. All three come from one field with complex multiplication, and that is why they agree. In Stepanov's proof the agreement is free, because there is only one tool. Here it has to be built, and building it is, as we read it, the heart of the architecture.</p>
+
+  <h3>2. Cheap steps are not free any more</h3>
+  <p>In Stepanov's degree count, each derivative raises the degree of the coefficients by at most n − 1. That bound comes for free, and it is what keeps the second term of his balance at (n − 1)m. The shape of the balance follows from it.</p>
+  <p>In the new proof the corresponding fact is that each rung of the ladder must take whole-number objects to whole-number objects at a small, fixed price. Nothing makes that automatic. If the price grew with the length of the ladder, the balance would be x/m + m², the best length would be x<sup>1/3</sup>, and the argument would stop at 2/3 instead of 1/2. Keeping the price down takes some of the deepest mathematics in the archive. This row has no counterpart on Stepanov's side: it is where the comparison stops helping.</p>
+
+  <h3>3. "Not zero" becomes a statement about a family</h3>
+  <p>Stepanov shows his polynomial is not zero in one line: two kinds of terms have degrees of different parity and cannot cancel. That is where his hypothesis "n odd" comes from.</p>
+  <p>The new proof cannot work with one object. It needs a whole family, and then it needs almost every member to be nonzero where it counts: degenerate local types must be rare, about 1/q, and the family must follow those weights. On top of that, the hardest case of the price per rung is closed by a single whole number, and everything hinges on that number not being zero. The same plain fact, a nonzero whole number is at least 1, is used three times.</p>
+
+  <h3>4. From some primes to all primes, and from a bound to zeros</h3>
+  <p>Stepanov counts points for each p separately, and the bound is the result. The new proof first controls only the inert primes of one field, then has to recover all primes, and at the end turns a bound on long windows into the absence of zeros with a lemma of Landau's type. Neither step has a counterpart in 1969. As we read them, they are known in kind and carry no new idea, but they make the right-hand column longer than the left.</p>
+
+  <h2>Another way to see the same thing</h2>
+  <p>Rubinstein's guide frames the proof through Chebyshev rather than Stepanov: Chebyshev bounded prime sums by the divisibility of factorials, and the new proof is that argument run with a far better integer. To us the two frames are the same idea seen from two sides. Chebyshev explains the first column of the dictionary, what is being counted; Stepanov explains why the exponent is a balance. The author's phrase "Stepanov determinant" points our way, but both readings agree on how the proof is built.</p>
+  <p>A historical echo, offered only as that: when Hasse proved the bound for elliptic curves in the 1930s, he used complex multiplication. Complex multiplication is at the centre of the new proof too. We do not claim any link beyond the echo.</p>
+
+  <p class="status">This page is our interpretation. The author has not described his proof in these terms. The left column is read from Stepanov's paper; the right column is our reading of the formal proof, with the depth of reading marked on each linked page.</p>
+
+  <footer>
+    <p>Corrections are welcome: <a href="https://github.com/revenue7-eng/reading-proofs/issues">open an issue</a>.</p>
+  </footer>
+</main>
+</body>
+</html>
