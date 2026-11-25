@@ -36,6 +36,11 @@
   .seg button.on { border-color: var(--accent); color: var(--accent); }
   .verdict { font-weight: 600; margin-top: 8px; }
   .ok { color: var(--ok); } .bad { color: var(--bad); }
+  .role { display:block; margin-top:3px; color:var(--quiet); font-size:13px; }
+  tr:target td { background:#fff1c2; }
+  h2:target { color:var(--accent); }
+  tr, h2 { scroll-margin-top: 24px; }
+  @media (prefers-color-scheme: dark) { tr:target td { background:#4a4220; } }
 </style>
 </head>
 <body>
@@ -83,10 +88,10 @@
   <h2>What it is built from</h2>
   <table>
     <tr><th>Piece</th><th>Known from</th><th>In the archive</th><th>How deep we read</th></tr>
-    <tr><td>Supersingular reduction at inert p</td><td>Deuring, 1941</td><td></td><td>the statement</td></tr>
-    <tr><td>Formal group of height 2</td><td>Lubin–Tate</td><td><code>LTIso</code></td><td>the statement</td></tr>
-    <tr><td>p-adic sigma function, for the theta kernel</td><td>the Bannai–Kobayashi line</td><td><code>sgStar</code></td><td>the statement</td></tr>
-    <tr><td>Dwork's integrality lemma</td><td>Dwork</td><td><code>DworkLemma</code></td><td>to the published source</td></tr>
+    <tr id="b-e9"><td>Supersingular reduction at inert p<span class="role">makes height 2 available at every inert prime</span></td><td>Deuring, 1941</td><td></td><td>the statement</td></tr>
+    <tr id="b-e10"><td>Formal group of height 2<span class="role">after rescaling, its logarithm is x + x^(p²) mod p: the local Frobenius</span></td><td>Lubin–Tate</td><td><code>LTIso</code></td><td>the statement</td></tr>
+    <tr id="b-e11"><td>p-adic sigma function, for the theta kernel<span class="role">builds the theta kernel whose phase mod p is an explicit polynomial</span></td><td>the Bannai–Kobayashi line</td><td><code>sgStar</code></td><td>the statement</td></tr>
+    <tr id="b-e12"><td>Dwork's integrality lemma<span class="role">keeps the exponential whole at the radius 1/(p − 1): the source of the gain</span></td><td>Dwork</td><td><code>DworkLemma</code></td><td>to the published source</td></tr>
   </table>
   <p>Every piece here is known, and the four facts used are elementary. What we take to be new is not a piece but the fit: the same object that gives this gain also gives the size and sorts the primes, so the three agree.</p>
 

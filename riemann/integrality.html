@@ -24,6 +24,11 @@
   th, td { text-align:left; padding: 7px 8px; border-bottom: 1px solid var(--rule); vertical-align: top; }
   th { color: var(--quiet); font-weight: 600; }
   code { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .role { display:block; margin-top:3px; color:var(--quiet); font-size:13px; }
+  tr:target td { background:#fff1c2; }
+  h2:target { color:var(--accent); }
+  tr, h2 { scroll-margin-top: 24px; }
+  @media (prefers-color-scheme: dark) { tr:target td { background:#4a4220; } }
 </style>
 </head>
 <body>
@@ -47,8 +52,8 @@
   <h2>What it is built from</h2>
   <table>
     <tr><th>Piece</th><th>Known from</th><th>In the archive</th><th>How deep we read</th></tr>
-    <tr><td>Siegel–Weil formula</td><td>Weil, 1965</td><td><code>SiegelWeilStd</code></td><td>the statement</td></tr>
-    <tr><td>Eisenstein series, doubling method</td><td>Piatetski-Shapiro, Rallis; re-derived inside the archive</td><td><code>Tr.closeSph</code></td><td>to the published source</td></tr>
+    <tr id="b-e19"><td>Siegel–Weil formula<span class="role">an input to the doubling method</span></td><td>Weil, 1965</td><td><code>SiegelWeilStd</code></td><td>the statement</td></tr>
+    <tr id="b-e20"><td>Eisenstein series, doubling method<span class="role">re-derives Rallis's formula: the exact norm on every floor</span></td><td>Piatetski-Shapiro, Rallis; re-derived inside the archive</td><td><code>Tr.closeSph</code></td><td>to the published source</td></tr>
   </table>
 
   <h2>What we have and have not read</h2>

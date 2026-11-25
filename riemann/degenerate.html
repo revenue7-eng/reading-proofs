@@ -30,6 +30,11 @@
   .seg button { font: 600 14px/1 system-ui, sans-serif; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--rule); background: transparent; color: var(--ink); cursor: pointer; }
   .seg button.on { border-color: var(--accent); color: var(--accent); }
   .verdict { font-weight: 600; margin-top: 8px; color: var(--ok); }
+  .role { display:block; margin-top:3px; color:var(--quiet); font-size:13px; }
+  tr:target td { background:#fff1c2; }
+  h2:target { color:var(--accent); }
+  tr, h2 { scroll-margin-top: 24px; }
+  @media (prefers-color-scheme: dark) { tr:target td { background:#4a4220; } }
 </style>
 </head>
 <body>
@@ -60,7 +65,7 @@
   <h2>What it is built from</h2>
   <table>
     <tr><th>Piece</th><th>Known from</th><th>In the archive</th><th>How deep we read</th></tr>
-    <tr><td>Characters of GL over F<sub>q</sub>; bad weights about 1/q</td><td>Green, 1955</td><td><code>LinkIRR</code></td><td>to the published source</td></tr>
+    <tr id="b-e21"><td>Characters of GL over F<sub>q</sub>; bad weights about 1/q<span class="role">exact weights of local types; degenerate ones weigh about 1/q</span></td><td>Green, 1955</td><td><code>LinkIRR</code></td><td>to the published source</td></tr>
     <tr><td>Siegel–Weil formula for volumes, the counting theorem's one outside input</td><td>Weil, 1965</td><td></td><td>the statement</td></tr>
   </table>
   <p>When we began, Green's theorem looked like a deep input. It turned out to be exact bookkeeping in a finite group; the real work of this support is done by the counting theorem.</p>

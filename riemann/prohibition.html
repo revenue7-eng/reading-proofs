@@ -24,6 +24,11 @@
   th, td { text-align:left; padding: 7px 8px; border-bottom: 1px solid var(--rule); vertical-align: top; }
   th { color: var(--quiet); font-weight: 600; }
   code { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .role { display:block; margin-top:3px; color:var(--quiet); font-size:13px; }
+  tr:target td { background:#fff1c2; }
+  h2:target { color:var(--accent); }
+  tr, h2 { scroll-margin-top: 24px; }
+  @media (prefers-color-scheme: dark) { tr:target td { background:#4a4220; } }
 </style>
 </head>
 <body>
@@ -51,9 +56,9 @@
   <h2>What it is built from</h2>
   <table>
     <tr><th>Piece</th><th>Known from</th><th>In the archive</th><th>How deep we read</th></tr>
-    <tr><td>Slope inequality</td><td>Bost</td><td><code>SlopeInequality</code></td><td>to the published source</td></tr>
-    <tr><td>Discrete series of the unitary group</td><td>Harish-Chandra</td><td><code>IsDS</code></td><td>the statement</td></tr>
-    <tr><td>Schur orthogonality, Bessel model</td><td>decay after Wu</td><td><code>LinkS</code>, <code>WuDecay</code></td><td>the statement</td></tr>
+    <tr id="b-e18"><td>Slope inequality<span class="role">the prohibition itself: a nonzero map of lattices cannot be too divisible</span></td><td>Bost</td><td><code>SlopeInequality</code></td><td>to the published source</td></tr>
+    <tr id="b-e16"><td>Discrete series of the unitary group<span class="role">supplies the nearly orthogonal frame, in our reading</span></td><td>Harish-Chandra</td><td><code>IsDS</code></td><td>the statement</td></tr>
+    <tr id="b-e17"><td>Schur orthogonality, Bessel model<span class="role">keeps the frame's subspaces from overlapping more than random ones</span></td><td>decay after Wu</td><td><code>LinkS</code>, <code>WuDecay</code></td><td>the statement</td></tr>
   </table>
   <p>Every piece is known. The slope inequality is the one we followed down to its source; the frame we read only as statements.</p>
 

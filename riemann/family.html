@@ -24,6 +24,11 @@
   th, td { text-align:left; padding: 7px 8px; border-bottom: 1px solid var(--rule); vertical-align: top; }
   th { color: var(--quiet); font-weight: 600; }
   code { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .role { display:block; margin-top:3px; color:var(--quiet); font-size:13px; }
+  tr:target td { background:#fff1c2; }
+  h2:target { color:var(--accent); }
+  tr, h2 { scroll-margin-top: 24px; }
+  @media (prefers-color-scheme: dark) { tr:target td { background:#4a4220; } }
 </style>
 </head>
 <body>
@@ -39,10 +44,10 @@
   <h2>What it is built from</h2>
   <table>
     <tr><th>Piece</th><th>Known from</th><th>In the archive</th><th>How deep we read</th></tr>
-    <tr><td>Family defined by a filter</td><td>simple assembly</td><td><code>classSel</code></td><td>to the published source</td></tr>
-    <tr><td>Finite subgroups of GL<sub>n</sub>(Q)</td><td>Minkowski</td><td><code>MinkDiv</code></td><td>the statement</td></tr>
-    <tr><td>Zero-free regions, zero density</td><td>Linnik, Xylouris, Jutila (by type)</td><td><code>adm6</code>, <code>adm7</code>, <code>adm11</code></td><td>the statement</td></tr>
-    <tr><td>Greenberg–Wiles, Chebotarev, Artin</td><td>external theorems</td><td><code>exportF_prmR_alt_alt</code></td><td>the statement</td></tr>
+    <tr id="b-e28"><td>Family defined by a filter<span class="role">defines the family as the data that meet a list of requirements</span></td><td>simple assembly</td><td><code>classSel</code></td><td>to the published source</td></tr>
+    <tr id="b-e29"><td>Finite subgroups of GL<sub>n</sub>(Q)<span class="role">used to show that the filter lets something through</span></td><td>Minkowski</td><td><code>MinkDiv</code></td><td>the statement</td></tr>
+    <tr id="b-e30"><td>Zero-free regions, zero density<span class="role">known facts about zeros, used to choose the data without circularity</span></td><td>Linnik, Xylouris, Jutila (by type)</td><td><code>adm6</code>, <code>adm7</code>, <code>adm11</code></td><td>the statement</td></tr>
+    <tr id="b-e31"><td>Greenberg–Wiles, Chebotarev, Artin<span class="role">external theorems used to show the family exists</span></td><td>external theorems</td><td><code>exportF_prmR_alt_alt</code></td><td>the statement</td></tr>
   </table>
   <p class="status">This page is our reading of the formal proof, not the author's account. The names of the zero-free and zero-density results are our identification by type.</p>
 

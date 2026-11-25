@@ -32,6 +32,11 @@
   .row output { min-width: 80px; text-align: right; font-variant-numeric: tabular-nums; }
   .num { font: 14px ui-monospace, SFMono-Regular, Menlo, monospace; }
   .verdict { font-weight: 600; margin-top: 8px; color: var(--ok); }
+  .role { display:block; margin-top:3px; color:var(--quiet); font-size:13px; }
+  tr:target td { background:#fff1c2; }
+  h2:target { color:var(--accent); }
+  tr, h2 { scroll-margin-top: 24px; }
+  @media (prefers-color-scheme: dark) { tr:target td { background:#4a4220; } }
 </style>
 </head>
 <body>
@@ -69,10 +74,10 @@
   <h2>What it is built from</h2>
   <table>
     <tr><th>Piece</th><th>Known from</th><th>In the archive</th><th>How deep we read</th></tr>
-    <tr><td>Kronecker's limit formula</td><td>Kronecker</td><td><code>KroneckerLimit</code></td><td>the statement</td></tr>
-    <tr><td>Chowla–Selberg: the CM period</td><td>Chowla, Selberg, 1967</td><td><code>chowla_selberg_eta</code></td><td>to the published source</td></tr>
-    <tr><td>Size benchmark ln(A! · Ω<sup>A</sup>)</td><td>Stirling plus the period</td><td><code>kerPlace</code></td><td>to the published source</td></tr>
-    <tr><td>Mass formula for CM</td><td>Siegel: volumes and masses</td><td><code>SiegelMassRatioCM</code></td><td>the statement</td></tr>
+    <tr id="b-e6"><td>Kronecker's limit formula<span class="role">the route by which the archive proves the period formula</span></td><td>Kronecker</td><td><code>KroneckerLimit</code></td><td>the statement</td></tr>
+    <tr id="b-e7"><td>Chowla–Selberg: the CM period<span class="role">writes the period through Gamma values, so ln Ω carries γ and L′/L(1, χ_K)</span></td><td>Chowla, Selberg, 1967</td><td><code>chowla_selberg_eta</code></td><td>to the published source</td></tr>
+    <tr id="b-e8"><td>Size benchmark ln(A! · Ω<sup>A</sup>)<span class="role">the size that divisibility is compared against</span></td><td>Stirling plus the period</td><td><code>kerPlace</code></td><td>to the published source</td></tr>
+    <tr id="b-e60"><td>Mass formula for CM<span class="role">volumes in the CM setting; we read only the statement and do not know its exact role</span></td><td>Siegel: volumes and masses</td><td><code>SiegelMassRatioCM</code></td><td>the statement</td></tr>
   </table>
   <p>Every piece here is classical, and the archive proves the period formula itself rather than quoting it. What matters is the choice of object whose size carries the right constants.</p>
 
