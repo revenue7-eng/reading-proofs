@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The family exists: a filter and standard theorems</title>
+<meta name="description" content="One part of the proof of the Riemann Hypothesis, as we read it: the family of objects is defined by a filter of requirements, and its existence follows from standard theorems and from what is known unconditionally about zeros.">
+<style>
+  :root { --ink:#1d1d1b; --quiet:#5b5b57; --rule:#e3e1da; --bg:#fbfaf7; --accent:#2f5d8a; }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink:#ecebe6; --quiet:#a9a8a2; --rule:#3a3a37; --bg:#191918; --accent:#8fb6dc; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font: 18px/1.6 Georgia, "Iowan Old Style", "Times New Roman", serif; }
+  main { max-width: 680px; margin: 0 auto; padding: 64px 24px 96px; }
+  h1 { font-size: 40px; line-height:1.15; margin:0 0 16px; font-weight: 600; }
+  .lede { font-size: 21px; color: var(--quiet); margin: 0 0 32px; }
+  h2 { font: 600 15px/1.4 system-ui, sans-serif; letter-spacing:.06em; text-transform:uppercase; color:var(--quiet); margin: 44px 0 12px; padding-top: 22px; border-top: 1px solid var(--rule); }
+  p { margin: 0 0 16px; }
+  a { color: var(--accent); }
+  .status { border-left: 3px solid var(--accent); padding: 4px 0 4px 16px; }
+  footer { margin-top: 64px; font: 12px/1.5 system-ui, sans-serif; color: var(--quiet); }
+  table { width:100%; border-collapse: collapse; font: 14px/1.45 system-ui, sans-serif; margin: 4px 0 16px; }
+  th, td { text-align:left; padding: 7px 8px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { color: var(--quiet); font-weight: 600; }
+  code { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; }
+</style>
+</head>
+<body>
+<main>
+  <h1>The family exists</h1>
+  <p class="lede">The last support, and the simplest: the objects the proof needs can actually be found.</p>
+  <p><a href="index.html">The architecture of a proof</a> &nbsp; <a href="map.html">The map</a> &nbsp; <a href="degenerate.html">Few bad members</a></p>
+
+  <h2>What it says</h2>
+  <p>The proof works with a family of data, one for each small ε; in our reading these are the auxiliary primes and the objects built from them. The family is defined by a filter, a list of requirements the data must meet. That the filter lets something through follows from standard theorems of number theory: Chebotarev's density theorem, Poitou–Tate duality, Minkowski's bound on finite subgroups of GL<sub>n</sub>(Q). It also uses what is known about zeros without any hypothesis: the classical zero-free regions and zero-density estimates.</p>
+  <p>There is no circle here. The facts about zeros used to build the family are ones proved long ago, unconditionally; the Riemann Hypothesis is not assumed anywhere along the way. As we read it, this support has no hard step.</p>
+
+  <h2>What it is built from</h2>
+  <table>
+    <tr><th>Piece</th><th>Known from</th><th>In the archive</th><th>How deep we read</th></tr>
+    <tr><td>Family defined by a filter</td><td>simple assembly</td><td><code>classSel</code></td><td>to the published source</td></tr>
+    <tr><td>Finite subgroups of GL<sub>n</sub>(Q)</td><td>Minkowski</td><td><code>MinkDiv</code></td><td>the statement</td></tr>
+    <tr><td>Zero-free regions, zero density</td><td>Linnik, Xylouris, Jutila (by type)</td><td><code>adm6</code>, <code>adm7</code>, <code>adm11</code></td><td>the statement</td></tr>
+    <tr><td>Greenberg–Wiles, Chebotarev, Artin</td><td>external theorems</td><td><code>exportF_prmR_alt_alt</code></td><td>the statement</td></tr>
+  </table>
+  <p class="status">This page is our reading of the formal proof, not the author's account. The names of the zero-free and zero-density results are our identification by type.</p>
+
+  <footer>
+    <p>Corrections are welcome: <a href="https://github.com/revenue7-eng/reading-proofs/issues">open an issue</a>.</p>
+  </footer>
+</main>
+</body>
+</html>

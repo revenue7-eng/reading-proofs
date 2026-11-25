@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Whole numbers on every rung: integrality and exact norms</title>
+<meta name="description" content="One part of the proof of the Riemann Hypothesis, as we read it: why the pairing between neighbouring lifts must be integral and its norms known exactly, and how the archive re-derives Rallis's inner product formula by the doubling method.">
+<style>
+  :root { --ink:#1d1d1b; --quiet:#5b5b57; --rule:#e3e1da; --bg:#fbfaf7; --accent:#2f5d8a; }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink:#ecebe6; --quiet:#a9a8a2; --rule:#3a3a37; --bg:#191918; --accent:#8fb6dc; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font: 18px/1.6 Georgia, "Iowan Old Style", "Times New Roman", serif; }
+  main { max-width: 680px; margin: 0 auto; padding: 64px 24px 96px; }
+  h1 { font-size: 40px; line-height:1.15; margin:0 0 16px; font-weight: 600; }
+  .lede { font-size: 21px; color: var(--quiet); margin: 0 0 32px; }
+  h2 { font: 600 15px/1.4 system-ui, sans-serif; letter-spacing:.06em; text-transform:uppercase; color:var(--quiet); margin: 44px 0 12px; padding-top: 22px; border-top: 1px solid var(--rule); }
+  p { margin: 0 0 16px; }
+  a { color: var(--accent); }
+  .status { border-left: 3px solid var(--accent); padding: 4px 0 4px 16px; }
+  footer { margin-top: 64px; font: 12px/1.5 system-ui, sans-serif; color: var(--quiet); }
+  table { width:100%; border-collapse: collapse; font: 14px/1.45 system-ui, sans-serif; margin: 4px 0 16px; }
+  th, td { text-align:left; padding: 7px 8px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { color: var(--quiet); font-weight: 600; }
+  code { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Whole numbers on every rung</h1>
+  <p class="lede">The ladder only works if every rung stays inside the whole numbers and its size is known exactly. This is the support that guarantees both.</p>
+  <p><a href="index.html">The architecture of a proof</a> &nbsp; <a href="map.html">The map</a> &nbsp; <a href="ladder.html">The ladder of lifts</a></p>
+
+  <h2>What the ladder needs</h2>
+  <p>Every argument in the proof rests on one fact: a nonzero whole number is at least 1. Divisibility means something only for whole numbers, and <a href="prohibition.html">the prohibition</a> applies only to lattices, the many-dimensional whole numbers. So the pairing between neighbouring rungs of <a href="ladder.html">the ladder</a> must be integral.</p>
+  <p>And the comparison of divisibility with size is meant to detect an error of size about √x against quantities of size about x. A size known only roughly would hide exactly what is being measured. So the norms on every rung must be known exactly.</p>
+
+  <h2>How the archive gets both</h2>
+  <p>It builds a tower of theta lifts and uses Rallis's inner product formula. The formula says that on each floor of the tower the norm is multiplied by a value of an L-function at a whole-number point. So the size of every rung is an explicit product, known exactly, and the lifts carry whole-number lattices to whole-number lattices.</p>
+  <p>The formula itself is not quoted. The archive derives it by the doubling method of Piatetski-Shapiro and Rallis, from the Siegel–Weil formula and the analytic continuation of Eisenstein series.</p>
+
+  <h2>What we expected, and what we found</h2>
+  <p>When we began reading, we thought the new idea of the proof might hide here, in the formula for the sizes of theta lifts. It does not. This part re-derives a known method, carefully and in full, inside the archive. It is a large body of work, and the ladder could not stand without it, but as we read it, it contains no new idea.</p>
+  <p>What does matter, and what <a href="integer.html">the integer page</a> describes, is the price of keeping each rung integral prime by prime. That price decides whether the exponent comes out as 1/2 or 2/3, and it is part of the idea.</p>
+
+  <h2>What it is built from</h2>
+  <table>
+    <tr><th>Piece</th><th>Known from</th><th>In the archive</th><th>How deep we read</th></tr>
+    <tr><td>Siegel–Weil formula</td><td>Weil, 1965</td><td><code>SiegelWeilStd</code></td><td>the statement</td></tr>
+    <tr><td>Eisenstein series, doubling method</td><td>Piatetski-Shapiro, Rallis; re-derived inside the archive</td><td><code>Tr.closeSph</code></td><td>to the published source</td></tr>
+  </table>
+
+  <h2>What we have and have not read</h2>
+  <p class="status">This page is our reading of the formal proof, not the author's account. We did not read the local integrals of the doubling method. We do not expect an idea to hide there, but we have not checked.</p>
+
+  <footer>
+    <p>Corrections are welcome: <a href="https://github.com/revenue7-eng/reading-proofs/issues">open an issue</a>.</p>
+  </footer>
+</main>
+</body>
+</html>
