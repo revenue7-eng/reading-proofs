@@ -105,8 +105,16 @@
     <tr><td>The Hecke polynomial, carried along the chain (this page)</td><td><code>KernelCommutationUpToUnits</code>, <code>theorem_of_alternate_form</code>, <code>Conclusion4</code>, <code>LowTermBound</code>, then <code>stmtAt_proved</code> into <code>sum_over_primes_service</code></td></tr>
     <tr><td>Divisibility of minors, without theta kernels (Jaswal)</td><td><code>linkG_without_kernels</code>, <code>key_minor_dvd</code></td></tr>
   </table>
-  <p>So the two readings do not contradict each other: they describe two different parts of the same place. As a control, two declarations from the same file as <code>Conclusion4</code> that the proof does not need, <code>DegreeDichotomyWithModelBounds</code> and <code>ClosedFormOfAdmitted</code>, are absent from the list. We did not rebuild the list from the export ourselves.</p>
-  <p class="status">Still open: which of the two plays the part of Stepanov's multiplicity, the gain that repeats on every rung. The list says that both are used, not what each one does.</p>
+  <p>So the two readings do not contradict each other. As a control, two declarations from the same file as <code>Conclusion4</code> that the proof does not need, <code>DegreeDichotomyWithModelBounds</code> and <code>ClosedFormOfAdmitted</code>, are absent from the list. We did not rebuild the list from the export ourselves.</p>
+  <p>Reading on in the code shows how they fit. Both work with the same numbers, the gains gain<sub>j</sub>(w) of rung j at the place w. Their sum over the m rungs is the order σ(u, w) to which the object has to be divisible at w (<code>SizeData₂.sg</code> in <code>Formalism/LocalRingCardinality/DataParams₂.lean</code>):</p>
+  <p class="formula">σ(u, w) = Σ<sub>j = 1..m</sub> ( gain<sub>j</sub>(w) + F<sub>j</sub>(w) − E<sub>u,j</sub>(w) )</p>
+  <p>Stepanov's multiplicity has two halves, and here each mechanism carries one of them.</p>
+  <table>
+    <tr><th>Half</th><th>In Stepanov</th><th>Here</th><th>Mechanism</th></tr>
+    <tr><td>The object really is divisible</td><td>the polynomial vanishes to order l at every point</td><td>the pairing on the lattice has valuation at least ⌊σ(u, w)⌋ at every good inert prime</td><td>the Hecke polynomial along the chain: <code>Conclusion4</code>, <code>LowTermBound</code>, then <code>LocalQuadraticParts.adm2</code>, <code>val2AllAtRF</code>, into the divisibility inputs of <code>LinkDIV</code></td></tr>
+    <tr><td>The multiplicity is enough</td><td>l times the number of points against the degree</td><td>the gains summed over the rungs cover the sum over primes, less the losses</td><td>Jaswal's: <code>LinkG</code>, proved through <code>linkG_without_kernels</code>, with <code>key_minor_dvd</code> as the local input</td></tr>
+  </table>
+  <p>"Good inert prime" is the condition <code>GIdx</code>: p at least 5, inert, not a level prime, plus two technical conditions. These are the primes that carry the Legendre count. Other classes of primes are handled by separate conditions. The pairing of halves with Stepanov's is our reading; the declarations and the formula for σ are as they stand in the code.</p>
 
   <footer>
     <p>Corrections are welcome: <a href="https://github.com/revenue7-eng/reading-proofs/issues">open an issue</a>.</p>
