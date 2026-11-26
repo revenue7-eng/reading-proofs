@@ -55,6 +55,7 @@
 
   <h2>Where the stand-in comes from</h2>
   <p>The central object of the proof is a field with complex multiplication. Its simplest model is an elliptic curve with the same symmetry, and we describe the mechanism on that model, as the archive's statements allow.</p>
+  <p>The field is not fixed once for the whole proof. For each range of x the archive takes its own field E (<code>Formalism.HC.HostRaw.E</code>): a subfield of a cyclotomic field, cut out by the power of 2 that sets the page, by the target character, and by two auxiliary primes q and d chosen for that window (<code>IsChiField</code>, <code>WinPair</code>). Its degree is of the order of 2<sup>e</sup>, and the page e is chosen with 2<sup>e</sup> close to x<sup>2 + 8&epsilon;</sup> (<code>PageN</code>). It is abelian and not totally real, so it is a CM field. Naskręcki's <a href="https://nasqret.github.io/riemann-rev/guide/proof-guide.pdf">guide to the architecture</a> describes the host field the same way. "One field" on this site means one field for all three roles within a window, not one field for every x.</p>
   <p>Take an imaginary quadratic field K. A prime p is <em>inert</em> if it stays prime in K; about half of all primes are. At every inert prime the curve has supersingular reduction (Deuring, 1941). That means its formal group, the law of adding points near zero written as a power series, has height 2.</p>
   <p>In the archive the logarithm of this group is the series</p>
   <p class="formula">log(x) = Σ<sub>j ≥ 0</sub> x<sup>p<sup>2j</sup></sup> / p<sup>j</sup></p>
